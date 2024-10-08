@@ -1,0 +1,53 @@
+{
+    "common": {
+        "button": {
+            "search": "Tìm kiếm",
+            "cancel": "Hủy",
+            "delete": "Xóa",
+            "save": "Lưu"
+        },
+        "sellect" : {
+            "status" : "Trạng thái"
+        }
+    },
+    "text": {
+        "SignIn": "Đăng nhập",
+        "Username": "Tên đăng nhập",
+        "Password": "Mật khẩu",
+        "RememberMeLogin": "Ghi nhớ đăng nhập",
+        "SignUp": "Đăng ký",
+        "EnterUsername": "Nhập tên đăng nhập",
+        "EnterPassword": "Nhập mật khẩu",
+        "WellcomeToCMSSystem": "Chào mừng đến với hệ thông quản lý CMS"
+    },
+    "message": {
+        "Invalid username or password": "Sai tài khoản hoặc mật khẩu!",
+        "Phone number already exists": "Số điện thoại đã tồn tại!",
+        "InternalServerError": "Đã có lỗi xảy ra!",
+        "required": "Vui lòng nhập dữ liệu!"
+    },
+    "profile": {
+        "title": "Thông tin cá nhân",
+        "displayName": "Tên hiển thị",
+        "firstName": "Họ",
+        "lastName": "Tên",
+        "birth": "Ngày sinh",
+        "gender": "Giới tính",
+        "genderMale": "Nam",
+        "genderFemale": "Nữ",
+        "genderOther": "Khác",
+        "email": "Email",
+        "phoneNumber": "Số điện thoại",
+        "submit": "Gửi"
+    },
+    "menu" : {
+        "accountManager" : "Quản lý tài khoản",
+        "listAccount" : "Danh sách tài khoản"
+    },
+    "breadcrumbs" : {
+        "home" : "Trang chủ",
+        "listAccount" : "Danh sách tài khoản",
+        "addAccount" : "Tạo tài khoản",
+        "editAccount" : "Sửa tài khoản"
+    }
+}

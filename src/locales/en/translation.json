@@ -1,0 +1,52 @@
+{
+    "common": {
+        "button": {
+            "search": "Search",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "save": "Save"
+        },
+        "sellect" : {
+            "status" : "Status"
+        }
+    },
+    "text": {
+        "SignIn": "Sign In",
+        "Username": "Username",
+        "Password": "Password",
+        "RememberMeLogin": "Remember me login",
+        "EnterUsername": "Enter your username",
+        "EnterPassword": "Enter your password",
+        "WellcomeToCMSSystem": "Wellcome to CMS system"
+    },
+    "message": {
+        "Invalid username or password": "Invalid username or password!",
+        "Phone number already exists" : "Phone number already exists",
+        "InternalServerError": "Internal server error!",
+        "required": "Please enter data!"
+    },
+    "profile": {
+        "title": "Profile infomation",
+        "displayName": "Display mame",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "birth": "Birth",
+        "gender": "Gender",
+        "genderMale": "Male",
+        "genderFemale": "Female",
+        "genderOther": "Orthe",
+        "email": "Email",
+        "phoneNumber": "Phone number",
+        "submit": "Submit"
+    },
+    "menu" : {
+        "accountManager" : "Account manager",
+        "listAccount" : "Accounts"
+    },
+    "breadcrumbs" : {
+        "home" : "Home",
+        "listAccount" : "List account",
+        "addAccount" : "Add account",
+        "editAccount" : "Edit account"
+    }
+}
