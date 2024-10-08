@@ -5,30 +5,30 @@ import axios from 'axios';
 
 // Tạo một instance của Axios
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8100',
-  timeout: 1000,
+  baseURL: 'http://localhost:8200/v1/manual-test',
+  timeout: 10000,
 });
 
 // Thêm interceptor cho yêu cầu để thêm token vào headers
 axiosInstance.interceptors.request.use(
-  (config) => {
+  (config : any) => {
     const tokenState: TokenState = store.getState().token as TokenState;
     if (tokenState.accessToken) {
       config.headers['Authorization'] = `Bearer ${tokenState.accessToken}`;
     }
     return config;
   },
-  (error) => {
+  (error  : any) => {
     return Promise.reject(error);
   }
 );
 
 // Thêm interceptor cho phản hồi để xử lý lỗi
 axiosInstance.interceptors.response.use(
-  (response) => {
+  (response  : any) => {
     return response; // Trả lại phản hồi thành công
   },
-  (error) => {
+  (error  : any) => {
     
     // Kiểm tra mã lỗi
     if (error.response && error.response.status === 400) {

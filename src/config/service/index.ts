@@ -1,4 +1,4 @@
 import { signIn } from "./auth";
-import { getSellerProfile } from "./profile";
 import { getSellerAccount } from "./account";
-export { signIn, getSellerAccount, getSellerProfile }
+import { getProjects, createProjects, updateProjects, deleteProject, getChildProjectByParentId } from "./project";
+export { signIn, getSellerAccount, getProjects, createProjects, updateProjects, deleteProject, getChildProjectByParentId}

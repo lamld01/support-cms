@@ -4,10 +4,15 @@
             "search": "Tìm kiếm",
             "cancel": "Hủy",
             "delete": "Xóa",
-            "save": "Lưu"
+            "save": "Lưu",
+            "edit": "Sửa",
+            "create": "Thêm mới",
+            "reset": "Reset",
+            "filter": "Lọc",
+            "resetFilter": "Reset lọc"
         },
-        "sellect" : {
-            "status" : "Trạng thái"
+        "sellect": {
+            "status": "Trạng thái"
         }
     },
     "text": {
@@ -18,7 +23,19 @@
         "SignUp": "Đăng ký",
         "EnterUsername": "Nhập tên đăng nhập",
         "EnterPassword": "Nhập mật khẩu",
-        "WellcomeToCMSSystem": "Chào mừng đến với hệ thông quản lý CMS"
+        "WellcomeToCMSSystem": "Chào mừng đến với hệ thông quản lý CMS",
+        "create": "Thêm mới",
+        "project": {
+            "projectId": "ID",
+            "action": "Chức năng",
+            "projectName": "Tên dự án",
+            "description": "Mô tả dự án",
+            "apiBaseUrl": "Link api",
+            "token": "Token",
+            "edit": "Sửa dự án",
+            "delete": "Xóa dự án",
+            "add": "Thêm dự án con"
+        }
     },
     "message": {
         "Invalid username or password": "Sai tài khoản hoặc mật khẩu!",
@@ -26,28 +43,19 @@
         "InternalServerError": "Đã có lỗi xảy ra!",
         "required": "Vui lòng nhập dữ liệu!"
     },
-    "profile": {
-        "title": "Thông tin cá nhân",
-        "displayName": "Tên hiển thị",
-        "firstName": "Họ",
-        "lastName": "Tên",
-        "birth": "Ngày sinh",
-        "gender": "Giới tính",
-        "genderMale": "Nam",
-        "genderFemale": "Nữ",
-        "genderOther": "Khác",
-        "email": "Email",
-        "phoneNumber": "Số điện thoại",
-        "submit": "Gửi"
+    "menu": {
+        "accountManager": "Quản lý tài khoản",
+        "listAccount": "Danh sách tài khoản",
+        "projectManager": "Quản lý dự án",
+        "listProject": "Danh sách dự án",
+        "addProject": "Tạo dự án",
+        "editProject": "Sửa dự án"
     },
-    "menu" : {
-        "accountManager" : "Quản lý tài khoản",
-        "listAccount" : "Danh sách tài khoản"
-    },
-    "breadcrumbs" : {
-        "home" : "Trang chủ",
-        "listAccount" : "Danh sách tài khoản",
-        "addAccount" : "Tạo tài khoản",
-        "editAccount" : "Sửa tài khoản"
+    "breadcrumbs": {
+        "home": "Trang chủ",
+        "listAccount": "Danh sách tài khoản",
+        "addAccount": "Tạo tài khoản",
+        "editAccount": "Sửa tài khoản",
+        "listProject" : "Danh sách dự án"
     }
 }

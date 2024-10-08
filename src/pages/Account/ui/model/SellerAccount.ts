@@ -14,15 +14,5 @@ export interface SellerAccount {
     username: string;
     role: SellerRoleEnum;
     status: SellerAccountStatus;
-    sellerProfileResponse : {
-        id?: number;
-        email?: string;
-        phoneNumber?: string;
-        displayName?: string;
-        firstName?: string;
-        lastName?: string;
-        gender?: string;
-        birth?: string;
-    }
 }
 

@@ -48,7 +48,7 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
             </ul>
           )}
         </li>
-        {/* E-Commerce Accordion */}
+        {/* Account Accordion */}
         <li>
           <div onClick={() => handleOpen(2)} className="flex justify-between items-center">
             <span className="flex">
@@ -60,7 +60,21 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
           {open === 2 && (
             <ul className="pl-1">
               <li><a href={WEB_ROUTER.LIST_ACCOUNT}>{t("menu.listAccount")}</a></li>
-              <li><a>Products</a></li>
+            </ul>
+          )}
+        </li>
+        {/* Project Accordion */}
+        <li>
+          <div onClick={() => handleOpen(3)} className="flex justify-between items-center">
+            <span className="flex">
+              <ShoppingBagIcon className="w-5 h-5 mr-2" />
+              {t("menu.projectManager")}
+            </span>
+            <ChevronDownIcon className={`h-4 w-4 transform ${open === 2 ? "rotate-180" : ""}`} />
+          </div>
+          {open === 3 && (
+            <ul className="pl-1">
+              <li><a href={WEB_ROUTER.LIST_PROJECT}>{t("menu.listProject")}</a></li>
             </ul>
           )}
         </li>

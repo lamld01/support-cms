@@ -125,12 +125,10 @@ const ListAccount = () => {
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>{t('id')}</th>
                             <th>{t('Username')}</th>
                             <th>{t('Status')}</th>
                             <th>{t('Role')}</th>
-                            <th>{t('Email')}</th>
-                            <th>{t('Phone')}</th>
-                            <th>{t('Name')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,12 +136,10 @@ const ListAccount = () => {
                             accounts.map((account, index) => (
                                 <tr key={account.id}>
                                     <th>{index + 1 + accountFilter.page * accountFilter.size}</th>
+                                    <th>{account?.id || 'N/A'}</th>
                                     <td>{account?.username || 'N/A'}</td>
                                     <td>{account?.status || 'N/A'}</td>
                                     <td>{account?.role || 'N/A'}</td>
-                                    <td>{account?.sellerProfileResponse?.email || 'N/A'}</td>
-                                    <td>{account?.sellerProfileResponse?.phoneNumber || 'N/A'}</td>
-                                    <td>{account?.sellerProfileResponse?.displayName || account?.sellerProfileResponse?.firstName || 'N/A'}</td>
                                 </tr>
                             ))
                         ) : (

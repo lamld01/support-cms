@@ -4,10 +4,14 @@
             "search": "Search",
             "cancel": "Cancel",
             "delete": "Delete",
-            "save": "Save"
+            "save": "Save",
+            "edit": "Edit",
+            "view": "View",
+            "create": "Create",
+            "reset": "Reset"
         },
-        "sellect" : {
-            "status" : "Status"
+        "sellect": {
+            "status": "Status"
         }
     },
     "text": {
@@ -17,36 +21,39 @@
         "RememberMeLogin": "Remember me login",
         "EnterUsername": "Enter your username",
         "EnterPassword": "Enter your password",
-        "WellcomeToCMSSystem": "Wellcome to CMS system"
+        "WellcomeToCMSSystem": "Wellcome to CMS system",
+        "create": "Create",
+        "project": {
+            "projectId": "Project id",
+            "action": "Action",
+            "projectName": "Project name",
+            "description": "Description",
+            "apiBaseUrl": "Api base url",
+            "token": "Token",
+            "edit": "Edit project",
+            "delete": "Delete project",
+            "add": "Add project"
+        }
     },
     "message": {
         "Invalid username or password": "Invalid username or password!",
-        "Phone number already exists" : "Phone number already exists",
+        "Phone number already exists": "Phone number already exists",
         "InternalServerError": "Internal server error!",
         "required": "Please enter data!"
     },
-    "profile": {
-        "title": "Profile infomation",
-        "displayName": "Display mame",
-        "firstName": "First name",
-        "lastName": "Last name",
-        "birth": "Birth",
-        "gender": "Gender",
-        "genderMale": "Male",
-        "genderFemale": "Female",
-        "genderOther": "Orthe",
-        "email": "Email",
-        "phoneNumber": "Phone number",
-        "submit": "Submit"
+    "menu": {
+        "accountManager": "Account manager",
+        "listAccount": "Accounts",
+        "projectManager": "Project manager",
+        "listProject": "Projects",
+        "addProject": "Add project",
+        "editProject": "Edit project"
     },
-    "menu" : {
-        "accountManager" : "Account manager",
-        "listAccount" : "Accounts"
-    },
-    "breadcrumbs" : {
-        "home" : "Home",
-        "listAccount" : "List account",
-        "addAccount" : "Add account",
-        "editAccount" : "Edit account"
+    "breadcrumbs": {
+        "home": "Home",
+        "listAccount": "List account",
+        "addAccount": "Add account",
+        "editAccount": "Edit account",
+        "listProject" : "List Project"
     }
 }
