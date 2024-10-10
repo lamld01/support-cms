@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
 const persistConfig = {
-  key: 'mos-cms',
+  key: 'dev-support',
   storage,
 };
 

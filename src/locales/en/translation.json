@@ -10,19 +10,11 @@
             "create": "Create",
             "reset": "Reset"
         },
-        "sellect": {
+        "select": {
             "status": "Status"
         }
     },
     "text": {
-        "SignIn": "Sign In",
-        "Username": "Username",
-        "Password": "Password",
-        "RememberMeLogin": "Remember me login",
-        "EnterUsername": "Enter your username",
-        "EnterPassword": "Enter your password",
-        "WellcomeToCMSSystem": "Wellcome to CMS system",
-        "create": "Create",
         "project": {
             "projectId": "Project id",
             "action": "Action",
@@ -33,6 +25,14 @@
             "edit": "Edit project",
             "delete": "Delete project",
             "add": "Add project"
+        },
+        "validateConstrain" : {
+            "constrainName" : "Constrain Name",
+            "regexValue" : "Regex value",
+            "description" : "Description",
+            "edit": "Edit validate constrain",
+            "delete": "Delete validate constrain",
+            "add": "Add validate constrain"
         }
     },
     "message": {
@@ -47,13 +47,17 @@
         "projectManager": "Project manager",
         "listProject": "Projects",
         "addProject": "Add project",
-        "editProject": "Edit project"
+        "editProject": "Edit project",
+        "apiTestManager" : "Test api",
+        "admin" : "Admin",
+        "validateConstrain" : "Validate constrain"
     },
     "breadcrumbs": {
         "home": "Home",
         "listAccount": "List account",
         "addAccount": "Add account",
         "editAccount": "Edit account",
-        "listProject" : "List Project"
+        "listProject" : "List Project",
+        "listValidateConstrains" : "List validate constrain"
     }
 }

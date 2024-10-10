@@ -109,7 +109,7 @@ const ListAccount = () => {
                             onChange={handleFilterChange}
                             value={accountFilter.status || ''}
                         >
-                            <option value="">{t('common.sellect.status')}</option>
+                            <option value="">{t('common.select.status')}</option>
                             <option value={SellerAccountStatus.ACTIVE}>{t('Active')}</option>
                             <option value={SellerAccountStatus.INACTIVE}>{t('Inactive')}</option>
                         </select>

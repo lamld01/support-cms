@@ -6,7 +6,6 @@ import { Project, ProjectFilter } from '../../model/type';
 import ModalCreate from '../component/ModalCreate';
 import { getProjects, deleteProject, getChildProjectByParentId } from '@/config/service'; // Import deleteProject
 import ModalUpdate from '../component/ModalUpdate';
-import { PencilIcon, PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ProjectRow from '../component/ProjectRow';
 
 const ListProject = () => {

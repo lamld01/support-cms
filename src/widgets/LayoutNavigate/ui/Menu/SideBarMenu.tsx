@@ -1,6 +1,6 @@
 import React from "react";
 import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { CubeTransparentIcon, PresentationChartBarIcon, ShoppingBagIcon, InboxIcon, UserCircleIcon, Cog6ToothIcon, PowerIcon } from "@heroicons/react/24/solid";
+import { CubeTransparentIcon, PresentationChartBarIcon, ShoppingBagIcon, InboxIcon, UserCircleIcon, Cog6ToothIcon, PowerIcon, ClipboardDocumentIcon, DocumentCheckIcon } from "@heroicons/react/24/solid";
 import { useTranslation } from "react-i18next";
 import { WEB_ROUTER } from "@/utils/web_router";
 
@@ -27,7 +27,7 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
         <button className="md:hidden" onClick={toggleSidebar}>
           <XMarkIcon className="w-6 h-6" />
         </button>
-        <h5 className="text-center text-lg font-semibold text-gray-800">CMS</h5>
+        <h5 className="text-center text-lg font-semibold text-secondary">APP</h5>
 
       </div>
       <ul className="menu bg-base-200 rounded-box">
@@ -36,7 +36,7 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
           <div onClick={() => handleOpen(1)} className="flex justify-between items-center">
             <span className="flex">
               <PresentationChartBarIcon className="w-5 h-5 mr-2" />
-              Dashboard
+              {t("menu.admin")}
             </span>
             <ChevronDownIcon className={`h-4 w-4 transform ${open === 1 ? "rotate-180" : ""}`} />
           </div>
@@ -44,7 +44,7 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
             <ul className="pl-1">
               <li><a>Analytics</a></li>
               <li><a>Reporting</a></li>
-              <li><a>Projects</a></li>
+              <li><a href={WEB_ROUTER.LIST_VALIDATE_CONSTRAIN}>{t("menu.validateConstrain")}</a></li>
             </ul>
           )}
         </li>
@@ -67,14 +67,30 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
         <li>
           <div onClick={() => handleOpen(3)} className="flex justify-between items-center">
             <span className="flex">
-              <ShoppingBagIcon className="w-5 h-5 mr-2" />
+              <ClipboardDocumentIcon className="w-5 h-5 mr-2" />
               {t("menu.projectManager")}
             </span>
-            <ChevronDownIcon className={`h-4 w-4 transform ${open === 2 ? "rotate-180" : ""}`} />
+
+            <ChevronDownIcon className={`h-4 w-4 transform ${open === 3 ? "rotate-180" : ""}`} />
           </div>
           {open === 3 && (
             <ul className="pl-1">
               <li><a href={WEB_ROUTER.LIST_PROJECT}>{t("menu.listProject")}</a></li>
+            </ul>
+          )}
+        </li>
+        {/* Api test Accordion */}
+        <li>
+          <div onClick={() => handleOpen(4)} className="flex justify-between items-center">
+            <span className="flex">
+              <DocumentCheckIcon className="w-5 h-5 mr-2" />
+              {t("menu.apiTestManager")}
+            </span>
+            <ChevronDownIcon className={`h-4 w-4 transform ${open === 4 ? "rotate-180" : ""}`} />
+          </div>
+          {open === 4 && (
+            <ul className="pl-1">
+              <li><a href={WEB_ROUTER.LIST_TEST_FIELD}>{t("menu.listTestField")}</a></li>
             </ul>
           )}
         </li>

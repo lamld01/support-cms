@@ -36,7 +36,6 @@ axiosInstance.interceptors.response.use(
       throw Error(message);
     } else if (error.response && (error.response.status === 401 || error.response.status === 403)) {     
       store.dispatch(clearToken());
-      window.location.href = WEB_ROUTER.AUTH_LOGIN
     } else {
       throw Error("InternalServerError"); // Gọi hàm showError
     }

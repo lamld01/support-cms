@@ -2,7 +2,7 @@ interface ProjectFilter {
     projectName ?: string,
     page : number,
     size : number,
-    sort : string[]
+    sort : string
 }
 
 interface Project {

@@ -6,25 +6,43 @@
             "delete": "Xóa",
             "save": "Lưu",
             "edit": "Sửa",
+            "view": "Xem",
+            "back": "Quay lại",
+            "upload": "Tải lên",
+            "download": "Tải xuống",
+            "print": "In",
+            "sort": "Sắp xếp",
+            "ascending": "Tăng dần",
+            "descending": "Giảm dần",
+            "duplicate": "Trùng lặp",
+            "add": "Thêm",
+            "update": "Cập nhật",
             "create": "Thêm mới",
             "reset": "Reset",
             "filter": "Lọc",
             "resetFilter": "Reset lọc"
         },
-        "sellect": {
-            "status": "Trạng thái"
+        "select": {
+            "status": "Trạng thái",
+            "project" : "Chọn dự án"
+        },
+        "status" : {
+            "active": "Kích hoạt",
+            "inactive": "Không kích hoạt"
+        },
+        "text" : {
+            "ID" : "ID",
+            "create" : "Thêm mới",
+            "edit" : "Sửa",
+            "update" : "Cập nhật",
+            "delete" : "Xóa",
+            "action" : "Chức năng",
+            "reset" : "Reset",
+            "filter" : "Lọc",
+            "resetFilter" : "Reset lọc"
         }
     },
     "text": {
-        "SignIn": "Đăng nhập",
-        "Username": "Tên đăng nhập",
-        "Password": "Mật khẩu",
-        "RememberMeLogin": "Ghi nhớ đăng nhập",
-        "SignUp": "Đăng ký",
-        "EnterUsername": "Nhập tên đăng nhập",
-        "EnterPassword": "Nhập mật khẩu",
-        "WellcomeToCMSSystem": "Chào mừng đến với hệ thông quản lý CMS",
-        "create": "Thêm mới",
         "project": {
             "projectId": "ID",
             "action": "Chức năng",
@@ -35,6 +53,21 @@
             "edit": "Sửa dự án",
             "delete": "Xóa dự án",
             "add": "Thêm dự án con"
+        },
+        "validateConstrain" : {
+            "constrainName" : "Tên điều kiện",
+            "regexValue" : "Giá trị regex",
+            "description" : "Mô tả",
+            "edit": "Sửa điều kiện",
+            "delete": "Xóa điều kiện",
+            "add": "Thêm điều kiện"
+        },
+        "testField": {
+            "fieldName": "Tên trường",
+            "projectId" : "Dự án",
+            "fieldCode" : "Mã trường",
+            "description": "Mô tả",
+            "validateConstrainIds" : "Điều kiện trường"
         }
     },
     "message": {
@@ -49,13 +82,19 @@
         "projectManager": "Quản lý dự án",
         "listProject": "Danh sách dự án",
         "addProject": "Tạo dự án",
-        "editProject": "Sửa dự án"
+        "editProject": "Sửa dự án",
+        "apiTestManager" : "Kiểm thử api",
+        "listTestField" : "Danh sách trường test",
+        "admin" : "Điều hành",
+        "validateConstrain" : "Điều kiện kiểm tra"
     },
     "breadcrumbs": {
         "home": "Trang chủ",
         "listAccount": "Danh sách tài khoản",
         "addAccount": "Tạo tài khoản",
         "editAccount": "Sửa tài khoản",
-        "listProject" : "Danh sách dự án"
+        "listProject" : "Danh sách dự án",
+        "listValidateConstrains" : "Danh sách điều kiện",
+        "listTestFields" : "Danh sách trường kiểm thử"
     }
 }

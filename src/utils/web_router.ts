@@ -7,7 +7,9 @@ enum WEB_ROUTER {
 
     SETTING="/setting",
     LIST_ACCOUNT="/accounts",
-    LIST_PROJECT="/projects"
+    LIST_PROJECT="/projects",
+    LIST_TEST_FIELD="/test/field",
+    LIST_VALIDATE_CONSTRAIN="/validate-constrain",
 }
 
 export {WEB_ROUTER}
