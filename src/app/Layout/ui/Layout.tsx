@@ -4,9 +4,9 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-import { WEB_ROUTER } from "@/utils/web_router";
 import { TokenState } from "@/config/slice/token/slice";
 import { SellerAccountStatus } from "@/model/enum";
+import { WEB_ROUTER } from "@/utils/web_router";
 
 const Layout: FC = () => {
   const navigate = useNavigate();
@@ -23,10 +23,10 @@ const Layout: FC = () => {
   }, []);
   useEffect(() => {
     if (!token.accessToken) {
-      navigate(WEB_ROUTER.AUTH_LOGIN);
+      navigate(WEB_ROUTER.AUTH.LOGIN.ROOT);
     }
     if (token.status == SellerAccountStatus.NEW) {
-      navigate(WEB_ROUTER.AUTH_PROFILE);
+      navigate(WEB_ROUTER.AUTH.PROFILE.ROOT);
     }
   }, [token]);
 

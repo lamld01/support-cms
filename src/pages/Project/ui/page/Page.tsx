@@ -16,7 +16,7 @@ const ListProject = () => {
     const [projectFilter, setProjectFilter] = useState<ProjectFilter>({
         page: 0,
         size: 20,
-        sort: [],
+        sort: "",
         projectName: undefined,
     });
     const [expandedProjectIds, setExpandedProjectIds] = useState<number[]>([]);

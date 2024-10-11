@@ -85,7 +85,7 @@ const ListValidateConstrain = () => {
         <PageLayout
             breadcrumbs={[
                 { label: t('breadcrumbs.home'), url: '/' },
-                { label: t('breadcrumbs.listValidateConstrains'), url: WEB_ROUTER.LIST_VALIDATE_CONSTRAIN, active: true },
+                { label: t('breadcrumbs.listValidateConstrains'), url: WEB_ROUTER.LIST_VALIDATE_CONSTRAIN.ROOT, active: true },
             ]}
             loading={loading}
             title={t('breadcrumbs.listValidateConstrains')}

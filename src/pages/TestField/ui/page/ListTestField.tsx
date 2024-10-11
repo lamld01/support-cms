@@ -8,11 +8,18 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ModalCreate from '../../component/ModalCreate';
 import ModalUpdate from '../../component/ModalUpdate';
 import { deleteTestField, getTestFields } from '../../service/TestFieldService';
+import { Project } from '@/pages/Project';
+import { getProjects } from '@/config/service';
+import { getValidateConstrains } from '@/pages/ValidateConstrain/service';
+import { ValidateConstrain } from '@/pages/ValidateConstrain/model/type';
 
 const ListTestField = () => {
     const modalCreateName = 'modal_test_field_create_project'; // Updated modal names
     const modalUpdateName = 'modal_test_field_update_project';
     const { t } = useTranslation();
+
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [validateConstrains, setValidateConstrains] = useState<ValidateConstrain[]>([]);
     const [testFieldFilter, setTestFieldFilter] = useState<TestFieldFilter>({
         page: 0,
         size: 20,
@@ -27,6 +34,21 @@ const ListTestField = () => {
     const [testFields, setTestFields] = useState<TestField[]>([]); // Updated state type
     const [loading, setLoading] = useState(false);
 
+    const fetchProjects = async (name?: string) => {
+        try {
+            const filter = {
+                projectName: name,
+                page: 0,
+                size: 10,
+                sort: "createdAt,desc"
+            };
+            const response = await getProjects(filter);
+            setProjects(response.data);
+        } catch (error: any) {
+            toast.error(t(`message.${error.message}`));
+        }
+    };
+
     const fetchTestFields = async (filter?: TestFieldFilter) => {
         setLoading(true);
         try {
@@ -40,9 +62,29 @@ const ListTestField = () => {
         }
     };
 
+    const fetchValidateConstrains = async (name?: string) => {
+        try {
+            const filter = {
+                validateConstrainName: name,
+                page: 0,
+                size: 10,
+                sort: "createdAt,desc"
+            };
+            const response = await getValidateConstrains(filter);
+            setValidateConstrains(response.data);
+        } catch (error: any) {
+            toast.error(t(`message.${error.message}`));
+        }
+    };
+
     useEffect(() => {
         fetchTestFields();
     }, [testFieldFilter.page]);
+
+    useEffect(() => {
+        fetchProjects();
+        fetchValidateConstrains();
+    }, []);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -85,7 +127,7 @@ const ListTestField = () => {
         <PageLayout
             breadcrumbs={[
                 { label: t('breadcrumbs.home'), url: '/' },
-                { label: t('breadcrumbs.listTestFields'), url: WEB_ROUTER.LIST_TEST_FIELD, active: true },
+                { label: t('breadcrumbs.listTestFields'), url: WEB_ROUTER.LIST_TEST_FIELD.ROOT, active: true },
             ]}
             loading={loading}
             title={t('breadcrumbs.listTestFields')}
@@ -147,10 +189,11 @@ const ListTestField = () => {
                             <th>#</th>
                             <th>{t('common.text.ID')}</th>
                             <th>{t('text.testField.fieldName')}</th>
-                            <th>{t('text.testField.projectId')}</th>
+                            <th>{t('text.testField.project')}</th>
+                            <th>{t('text.testField.defaultRegexValue')}</th>
                             <th>{t('text.testField.description')}</th>
                             <th>{t('text.testField.fieldCode')}</th>
-                            <th>{t('text.testField.validateConstrainIds')}</th>
+                            <th>{t('text.testField.validateConstrain')}</th>
                             <th>{t('common.text.action')}</th>
                         </tr>
                     </thead>
@@ -162,6 +205,7 @@ const ListTestField = () => {
                                     <td>{field.id || 'N/A'}</td>
                                     <td>{field.fieldName || 'N/A'}</td>
                                     <td>{field.project.projectName || 'N/A'}</td>
+                                    <td>{field.defaultRegexValue || 'N/A'}</td>
                                     <td>{field.description || 'N/A'}</td>
                                     <td>{field.fieldCode || 'N/A'}</td>
                                     <td>
@@ -225,8 +269,19 @@ const ListTestField = () => {
                 </div>
             </div>
             {/* Create and Update Modals */}
-            <ModalCreate modalName={modalCreateName} fetchTestFields={fetchTestFields} />
-            <ModalUpdate modalName={modalUpdateName} fetchTestFields={fetchTestFields} testField={selectedTestField} />
+            <ModalCreate
+                modalName={modalCreateName}
+                fetchTestFields={fetchTestFields}
+                projects={projects}
+                validateConstrains={validateConstrains}
+                fetchValidateConstrains={fetchValidateConstrains} />
+            <ModalUpdate
+                modalName={modalUpdateName}
+                fetchTestFields={fetchTestFields}
+                testField={selectedTestField}
+                projects={projects}
+                validateConstrains={validateConstrains}
+                fetchValidateConstrains={fetchValidateConstrains} />
         </PageLayout>
     );
 };

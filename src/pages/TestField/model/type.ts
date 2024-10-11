@@ -16,6 +16,7 @@ export interface TestField {
     fieldName: string,
     project: Project,
     description: string,
+    defaultRegexValue: string,
     fieldCode: string,
     validateConstrains?: ValidateConstrain[]
   }
@@ -24,6 +25,7 @@ export interface TestFieldCreate {
     fieldName: string,
     projectId: number,
     description: string,
+    defaultRegexValue: string,
     fieldCode: string,
     validateConstrainIds: number[]
 }
@@ -32,6 +34,7 @@ export interface TestFieldUpdate {
     fieldName: string,
     projectId: number,
     description: string,
+    defaultRegexValue: string,
     fieldCode: string,
     validateConstrainIds: number[]
   }

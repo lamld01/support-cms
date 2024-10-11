@@ -13,17 +13,19 @@ import { getProjects } from "@/config/service";
 interface ModalCreateTestFieldProps {
     modalName: string;
     fetchTestFields: () => void;
+    projects : Project[];
+    validateConstrains: ValidateConstrain[];
+    fetchValidateConstrains: (name: string) => void;
 }
 
-const ModalCreateTestField = ({ modalName, fetchTestFields }: ModalCreateTestFieldProps) => {
+const ModalCreateTestField = ({ modalName, fetchTestFields, projects, validateConstrains, fetchValidateConstrains }: ModalCreateTestFieldProps) => {
     const { t } = useTranslation();
-    const [validateConstrains, setValidateConstrains] = useState<ValidateConstrain[]>([]);
-    const [projects, setProjects] = useState<Project[]>([]);
     const [formData, setFormData] = useState<TestFieldCreate>({
         fieldName: "",
         projectId: 0,
         description: "",
         fieldCode: "",
+        defaultRegexValue: "",
         validateConstrainIds: [],
     });
     const [loading, setLoading] = useState(false);
@@ -33,35 +35,6 @@ const ModalCreateTestField = ({ modalName, fetchTestFields }: ModalCreateTestFie
         setFormData({ ...formData, [name]: value });
     };
 
-    const fetchValidateConstrains = async (name?: string) => {
-        try {
-            const filter = {
-                validateConstrainName: name,
-                page: 0,
-                size: 10,
-                sort: "createdAt,desc"
-            };
-            const response = await getValidateConstrains(filter);
-            setValidateConstrains(response.data);
-        } catch (error: any) {
-            toast.error(t(`message.${error.message}`));
-        }
-    };
-
-    const fetchProjects = async (name?: string) => {
-        try {
-            const filter = {
-                projectName: name,
-                page: 0,
-                size: 10,
-                sort: "createdAt,desc"
-            };
-            const response = await getProjects(filter);
-            setProjects(response.data);
-        } catch (error: any) {
-            toast.error(t(`message.${error.message}`));
-        }
-    };
 
     // Create a debounced version of fetchValidateConstrains
     const debouncedFetchValidateConstrains = useCallback(
@@ -69,10 +42,6 @@ const ModalCreateTestField = ({ modalName, fetchTestFields }: ModalCreateTestFie
         []
     );
 
-    useEffect(() => {
-        fetchProjects();
-        fetchValidateConstrains();
-    }, [])
     const createTestFieldData = async () => {
         setLoading(true);
         try {
@@ -111,9 +80,9 @@ const ModalCreateTestField = ({ modalName, fetchTestFields }: ModalCreateTestFie
                     />
                 </div>
 
-                                {/* Project Select Dropdown */}
-                                <div className="form-control my-4">
-                    <label className="label">{t('text.testField.projectId')}</label>
+                {/* Project Select Dropdown */}
+                <div className="form-control my-4">
+                    <label className="label">{t('text.testField.project')}</label>
                     <select
                         className="select select-bordered"
                         name="projectId"
@@ -127,6 +96,20 @@ const ModalCreateTestField = ({ modalName, fetchTestFields }: ModalCreateTestFie
                             </option>
                         ))}
                     </select>
+                </div>
+
+
+                {/* Field default regex Input */}
+                <div className="form-control my-4">
+                    <label className="label">{t('text.testField.defaultRegex')}</label>
+                    <input
+                        type="text"
+                        className="input input-bordered"
+                        name="defaultRegexValue"
+                        value={formData.defaultRegexValue}
+                        onChange={handleInputChange}
+                        placeholder={t('text.testField.defaultRegex')}
+                    />
                 </div>
 
                 {/* Description Input */}
@@ -156,7 +139,7 @@ const ModalCreateTestField = ({ modalName, fetchTestFields }: ModalCreateTestFie
 
                 {/* Validate Constrain IDs Input - using react-select */}
                 <div className="form-control my-4">
-                    <label className="label">{t('text.testField.validateConstrainIds')}</label>
+                    <label className="label">{t('text.testField.validateConstrain')}</label>
                     <Select
                         isMulti
                         options={validateConstrains.map(constrain => ({

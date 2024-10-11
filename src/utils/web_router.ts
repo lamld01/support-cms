@@ -1,15 +1,57 @@
-enum WEB_ROUTER {
-    HOME = "/",
+const WEB_ROUTER = {
+    HOME: {
+        ROOT: '/',
+        PATH: '/'
+    },
 
-    AUTH = "/auth",
-    AUTH_LOGIN = "/auth/login",
-    AUTH_PROFILE = "/auth/profile",
+    AUTH: {
+        ROOT: '/auth',
+        LOGIN: {
+            ROOT: '/auth/login',
+            PATH: 'login'
+        },
+        PROFILE: {
+            ROOT: '/auth/profile',
+            PATH: 'profile'
+        }
+    },
 
-    SETTING="/setting",
-    LIST_ACCOUNT="/accounts",
-    LIST_PROJECT="/projects",
-    LIST_TEST_FIELD="/test/field",
-    LIST_VALIDATE_CONSTRAIN="/validate-constrain",
-}
+    SETTING: {
+        ROOT: '/setting',
+        PATH: 'setting'
+    },
 
-export {WEB_ROUTER}
+    LIST_ACCOUNT: {
+        ROOT: '/accounts',
+        PATH: 'accounts'
+    },
+
+    LIST_PROJECT: {
+        ROOT: '/projects',
+        PATH: 'projects'
+    },
+
+    LIST_TEST_FIELD: {
+        ROOT: '/test/field',
+        PATH: '/test/field'
+    },
+
+    LIST_TEST_API: {
+        ROOT: '/test/api',
+        CREATE: {
+            ROOT: '/test/api/create',
+            PATH: 'create'
+        },
+        UPDATE: {
+            ROOT: 'test/api/update/:id',
+            PATH: 'update'
+        }
+    },
+
+    LIST_VALIDATE_CONSTRAIN: {
+        ROOT: '/validate-constrain',
+        PATH: '/validate-constrain'
+    }
+};
+
+export { WEB_ROUTER };

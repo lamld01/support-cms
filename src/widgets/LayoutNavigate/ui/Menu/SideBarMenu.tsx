@@ -44,7 +44,7 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
             <ul className="pl-1">
               <li><a>Analytics</a></li>
               <li><a>Reporting</a></li>
-              <li><a href={WEB_ROUTER.LIST_VALIDATE_CONSTRAIN}>{t("menu.validateConstrain")}</a></li>
+              <li><a href={WEB_ROUTER.LIST_VALIDATE_CONSTRAIN.ROOT}>{t("menu.validateConstrain")}</a></li>
             </ul>
           )}
         </li>
@@ -59,7 +59,7 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
           </div>
           {open === 2 && (
             <ul className="pl-1">
-              <li><a href={WEB_ROUTER.LIST_ACCOUNT}>{t("menu.listAccount")}</a></li>
+              <li><a href={WEB_ROUTER.LIST_ACCOUNT.ROOT}>{t("menu.listAccount")}</a></li>
             </ul>
           )}
         </li>
@@ -75,7 +75,7 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
           </div>
           {open === 3 && (
             <ul className="pl-1">
-              <li><a href={WEB_ROUTER.LIST_PROJECT}>{t("menu.listProject")}</a></li>
+              <li><a href={WEB_ROUTER.LIST_PROJECT.ROOT}>{t("menu.listProject")}</a></li>
             </ul>
           )}
         </li>
@@ -90,7 +90,8 @@ const SidebarMenu = ({ sidebarOpen, toggleSidebar }: SidebarMenuProps) => {
           </div>
           {open === 4 && (
             <ul className="pl-1">
-              <li><a href={WEB_ROUTER.LIST_TEST_FIELD}>{t("menu.listTestField")}</a></li>
+              <li><a href={WEB_ROUTER.LIST_TEST_FIELD.ROOT}>{t("menu.listTestField")}</a></li>
+              <li><a href={WEB_ROUTER.LIST_TEST_API.ROOT}>{t("menu.listTestApi")}</a></li>
             </ul>
           )}
         </li>

@@ -24,22 +24,22 @@
         },
         "select": {
             "status": "Trạng thái",
-            "project" : "Chọn dự án"
+            "project": "Chọn dự án"
         },
-        "status" : {
+        "status": {
             "active": "Kích hoạt",
             "inactive": "Không kích hoạt"
         },
-        "text" : {
-            "ID" : "ID",
-            "create" : "Thêm mới",
-            "edit" : "Sửa",
-            "update" : "Cập nhật",
-            "delete" : "Xóa",
-            "action" : "Chức năng",
-            "reset" : "Reset",
-            "filter" : "Lọc",
-            "resetFilter" : "Reset lọc"
+        "text": {
+            "ID": "ID",
+            "create": "Thêm mới",
+            "edit": "Sửa",
+            "update": "Cập nhật",
+            "delete": "Xóa",
+            "action": "Chức năng",
+            "reset": "Reset",
+            "filter": "Lọc",
+            "resetFilter": "Reset lọc"
         }
     },
     "text": {
@@ -54,27 +54,42 @@
             "delete": "Xóa dự án",
             "add": "Thêm dự án con"
         },
-        "validateConstrain" : {
-            "constrainName" : "Tên điều kiện",
-            "regexValue" : "Giá trị regex",
-            "description" : "Mô tả",
+        "validateConstrain": {
+            "constrainName": "Tên điều kiện",
+            "regexValue": "Giá trị regex",
+            "description": "Mô tả",
             "edit": "Sửa điều kiện",
             "delete": "Xóa điều kiện",
             "add": "Thêm điều kiện"
         },
         "testField": {
             "fieldName": "Tên trường",
-            "projectId" : "Dự án",
-            "fieldCode" : "Mã trường",
+            "project": "Dự án",
+            "fieldCode": "Mã trường",
             "description": "Mô tả",
-            "validateConstrainIds" : "Điều kiện trường"
+            "validateConstrain": "Điều kiện kiểm thử",
+            "defaultRegex": "Regex mặc định"
+        },
+        "testApi": {
+            "apiName": "Tên api",
+            "project": "Dự án",
+            "description": "Mô tả",
+            "method": "method",
+            "header": "Header",
+            "headers": "Headers",
+            "param": "Parameters",
+            "params": "Parameters",
+            "body": "Body"
         }
     },
     "message": {
         "Invalid username or password": "Sai tài khoản hoặc mật khẩu!",
         "Phone number already exists": "Số điện thoại đã tồn tại!",
         "InternalServerError": "Đã có lỗi xảy ra!",
-        "required": "Vui lòng nhập dữ liệu!"
+        "required": "Vui lòng nhập dữ liệu!",
+        "apiError": "Có lỗi khi lấy danh sách",
+        "deleteConfirm": "Bạn có chắc chắn muốn xóa api này?",
+        "deleteSuccess": "Xóa api thành công"
     },
     "menu": {
         "accountManager": "Quản lý tài khoản",
@@ -83,18 +98,30 @@
         "listProject": "Danh sách dự án",
         "addProject": "Tạo dự án",
         "editProject": "Sửa dự án",
-        "apiTestManager" : "Kiểm thử api",
-        "listTestField" : "Danh sách trường test",
-        "admin" : "Điều hành",
-        "validateConstrain" : "Điều kiện kiểm tra"
+        "apiTestManager": "Kiểm thử api",
+        "listTestField": "Danh sách trường test",
+        "listTestApi": "Danh sách api",
+        "admin": "Điều hành",
+        "validateConstrain": "Điều kiện kiểm tra"
     },
     "breadcrumbs": {
         "home": "Trang chủ",
         "listAccount": "Danh sách tài khoản",
         "addAccount": "Tạo tài khoản",
         "editAccount": "Sửa tài khoản",
-        "listProject" : "Danh sách dự án",
-        "listValidateConstrains" : "Danh sách điều kiện",
-        "listTestFields" : "Danh sách trường kiểm thử"
-    }
+        "listProject": "Danh sách dự án",
+        "listValidateConstrains": "Danh sách điều kiện",
+        "listTestFields": "Danh sách trường kiểm thử",
+        "listTestApis": "Danh sách api",
+        "testApi" : {
+            "add": "Thêm api",
+            "edit": "Sửa api",
+            "delete": "Xóa api"
+        }
+    },
+    "pagination": {
+        "prev": "«",
+        "next": "»"
+    },
+    "No data available": "Không có dữ liệu"
 }
