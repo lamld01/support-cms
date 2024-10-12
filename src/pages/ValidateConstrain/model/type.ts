@@ -1,5 +1,6 @@
 export interface ValidateConstrainFilter {
     validateConstrainName?: string;
+    projectId?: number;
     regexValue?: string;
     status?: 'ACTIVE' | 'INACTIVE';
     page: number | 1;

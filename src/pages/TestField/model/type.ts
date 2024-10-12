@@ -2,17 +2,17 @@ import { Project } from "@/pages/Project";
 import { ValidateConstrain } from "@/pages/ValidateConstrain/model/type";
 
 export interface TestFieldFilter {
-    projectId?: number;
+    projectId?: number | null;
     fieldName?: string;
     fieldCode?: string;
     constrainIds?: number[];
     page: number | 1;
     size: number | 20;
-    sort: string[] | [];
+    sort: string;
 }
 
 export interface TestField {
-    id: 0,
+    id: number,
     fieldName: string,
     project: Project,
     description: string,

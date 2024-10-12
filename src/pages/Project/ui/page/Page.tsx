@@ -3,10 +3,10 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { PageLayout } from '@/widgets';
 import { Project, ProjectFilter } from '../../model/type';
-import ModalCreate from '../component/ModalCreate';
 import { getProjects, deleteProject, getChildProjectByParentId } from '@/config/service'; // Import deleteProject
 import ModalUpdate from '../component/ModalUpdate';
 import ProjectRow from '../component/ProjectRow';
+import ModalCreate from '../component/ModalCreate';
 
 const ListProject = () => {
     const modalCreateName = 'modal_create_project';

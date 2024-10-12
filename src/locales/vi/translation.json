@@ -3,11 +3,13 @@
         "button": {
             "search": "Tìm kiếm",
             "cancel": "Hủy",
+            "close" : "Đóng",
             "delete": "Xóa",
             "save": "Lưu",
             "edit": "Sửa",
             "view": "Xem",
             "back": "Quay lại",
+            "runTest" : "Chạy kiểm thử",
             "upload": "Tải lên",
             "download": "Tải xuống",
             "print": "In",
@@ -39,6 +41,7 @@
             "action": "Chức năng",
             "reset": "Reset",
             "filter": "Lọc",
+            "result" : "Kết quả",
             "resetFilter": "Reset lọc"
         }
     },
@@ -68,18 +71,22 @@
             "fieldCode": "Mã trường",
             "description": "Mô tả",
             "validateConstrain": "Điều kiện kiểm thử",
+            "validateConstrainIds": "Điều kiện kiểm thử",
             "defaultRegex": "Regex mặc định"
         },
         "testApi": {
             "apiName": "Tên api",
             "project": "Dự án",
+            "selectProject": "Chọn dự án",
             "description": "Mô tả",
             "method": "method",
             "header": "Header",
             "headers": "Headers",
             "param": "Parameters",
             "params": "Parameters",
-            "body": "Body"
+            "body": "Body",
+            "path": "Path",
+            "field" : "Trường dữ liệu"
         }
     },
     "message": {

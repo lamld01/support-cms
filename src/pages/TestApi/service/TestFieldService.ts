@@ -28,3 +28,23 @@ export const deleteTestApi = async (testApiId: number) => {
     const response = await axiosInstant.delete(`/test-api/${testApiId}`);
     return response.data;
 }
+
+
+export const getJsonBodyExampleTestApi = async (testApiId: number) => {
+    const response = await axiosInstant.get(`/test-api/json-body`, {
+        params: {
+            id: testApiId
+        }
+    });
+    return response.data;
+}
+
+
+export const requestToTestApi = async (testApiId: number) => {
+    const response = await axiosInstant.post(`/test-api/request`, {}, {
+        params: {
+            id: testApiId
+        }
+    });
+    return response.data;
+}

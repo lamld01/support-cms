@@ -103,7 +103,7 @@ const ModalUpdateTestField = ({ modalName, testField, fetchTestFields, projects,
                         value={formData.projectId}
                         onChange={(e) => setFormData({ ...formData, projectId: Number(e.target.value) })}
                     >
-                        <option value="">{t('text.select.project')}</option>
+                        <option value="" disabled>{t('text.testField.project')}</option>
                         {projects.map(project => (
                             <option key={project.id} value={project.id}>
                                 {project.projectName}

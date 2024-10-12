@@ -4,15 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { PageLayout } from '@/widgets';
 import { TestApi, TestApiFilter } from '../../model/type';
 import { WEB_ROUTER } from '@/utils/web_router';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, EyeIcon, ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
 import { Project } from '@/pages/Project';
 import { getProjects } from '@/config/service';
-import { deleteTestApi, getTestApis } from '../../service/TestFieldService';
+import { deleteTestApi, getJsonBodyExampleTestApi, getTestApis, requestToTestApi } from '../../service/TestFieldService';
 import { useNavigate } from 'react-router-dom';
-import JSONPretty from 'react-json-pretty';
+import { JsonView, defaultStyles } from 'react-json-view-lite';
+import JsonViewModal from '@/widgets/LayoutViewJson/ui/page/JsonView';
+import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/16/solid';
+import { BiRightArrow } from 'react-icons/bi';
 
 const ListTestApi = () => {
-
+    const modelViewName = 'model_json_view';
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [projects, setProjects] = useState<Project[]>([]);
@@ -26,8 +29,9 @@ const ListTestApi = () => {
         size: 20,
         total: 0,
     });
-    const [testApis, setTestApis] = useState<TestApi[]>([]); // Updated state type
+    const [testApis, setTestApis] = useState<TestApi[]>([]);
     const [loading, setLoading] = useState(false);
+    const [modalData, setModalData] = useState<any | undefined>(null);
 
     const fetchProjects = async (name?: string) => {
         try {
@@ -57,6 +61,32 @@ const ListTestApi = () => {
         }
     };
 
+    const getJsonBodyExample = async (id: number) => {
+        try {
+            const response = await getJsonBodyExampleTestApi(id);
+            setModalData(response.data); // Set the data for modal
+            const modal = document.getElementById(modelViewName);
+            if (modal instanceof HTMLDialogElement) {
+                modal.showModal();
+            }
+        } catch (error: any) {
+            toast.error(t(`message.${error.message}`));
+        }
+    };
+
+    const requestTestApi = async (id: number) => {
+        try {
+            const response = await requestToTestApi(id);
+            setModalData(response.data); // Set the data for modal
+            const modal = document.getElementById(modelViewName);
+            if (modal instanceof HTMLDialogElement) {
+                modal.showModal();
+            }
+        } catch (error: any) {
+            toast.error(t(`message.${error.message}`));
+        }
+    };
+
     useEffect(() => {
         fetchTestApis();
     }, [testApiFilter.page]);
@@ -71,7 +101,7 @@ const ListTestApi = () => {
     };
 
     const handleSearch = () => {
-        setTestApiFilter({ ...testApiFilter, page: 0 }); // Reset to first page on search
+        setTestApiFilter({ ...testApiFilter, page: 0 });
         fetchTestApis({ ...testApiFilter, page: 0 });
     };
 
@@ -79,15 +109,13 @@ const ListTestApi = () => {
         setTestApiFilter({ ...testApiFilter, page: newPage });
     };
 
-
-    // Delete test api
     const handleDeleteTestApi = async (id: number) => {
         const confirmDelete = window.confirm(t('Are you sure you want to delete this test api?'));
         if (confirmDelete) {
             try {
                 await deleteTestApi(id);
                 toast.success(t('Test api deleted successfully'));
-                fetchTestApis(); // Refresh test api list after deletion
+                fetchTestApis();
             } catch (error: any) {
                 toast.error(t(`message.${error.message}`));
             }
@@ -174,79 +202,70 @@ const ListTestApi = () => {
                                     <td>{api.description || 'N/A'}</td>
                                     <td>
                                         <div>
-                                            <JSONPretty
-                                                className="json-display"
-                                                id="testApi_param_value"
+                                            <JsonView
+                                                style={defaultStyles}
                                                 data={api.param}
                                             />
                                         </div>
                                     </td>
                                     <td>
                                         <div>
-                                            <JSONPretty
-                                                className="json-display"
-                                                id="testApi_header_value"
+                                            <JsonView
+                                                style={defaultStyles}
                                                 data={api.header}
                                             />
                                         </div>
                                     </td>
                                     <td>
-                                            <JSONPretty
-                                                className="json-display"
-                                                id="testApi_body_value"
-                                                data={JSON.parse(api.body)}
-                                            />
+                                        <button
+                                            className="btn btn-icon btn-sm"
+                                            onClick={() => getJsonBodyExample(api.id)}
+                                            title={t('View JSON Body')}
+                                        >
+                                            <EyeIcon className="h-4 w-4" aria-hidden="true" />
+                                        </button>
                                     </td>
-                                    <td className="justify-center items-center h-full">
-                                        <button
-                                            className="btn btn-sm btn-warning mx-2 "
-                                            onClick={() => navigate(`${WEB_ROUTER.LIST_TEST_API.UPDATE.PATH}/${api.id}`)}
-                                            title={t(`common.button.edit`)}
-                                        >
-                                            <PencilIcon className="h-4 w-4" aria-hidden="true" />
-                                        </button>
-                                        <button
-                                            className="btn btn-sm btn-error mx-2"
-                                            onClick={() => handleDeleteTestApi(api.id)}
-                                            title={t(`common.button.delete`)}
-                                        >
-                                            <TrashIcon className="h-4 w-4" aria-hidden="true" />
-                                        </button>
+                                    <td>
+                                        <div className="flex justify-center gap-2">
+
+                                            <button
+                                                className="btn btn-accent btn-xs"
+                                                onClick={() => requestTestApi(api.id)}
+                                                title={t('common.button.runTest')}
+
+                                            >
+                                                <BiRightArrow className="h-4 w-4" aria-hidden="true" />
+                                            </button>
+                                            <button
+                                                className="btn btn-warning btn-xs"
+                                                onClick={() => navigate(`${WEB_ROUTER.LIST_TEST_API.UPDATE.PATH}/${api.id}`)}
+                                                title={t('common.button.edit')}
+                                            >
+                                                <PencilIcon className="h-4 w-4" aria-hidden="true" />
+                                            </button>
+                                            <button
+                                                className="btn btn-error btn-xs"
+                                                onClick={() => handleDeleteTestApi(api.id)}
+                                                title={t('common.button.delete')}
+                                            >
+                                                <TrashIcon className="h-4 w-4" aria-hidden="true" />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={9} className="text-center">
-                                    {t('No data available')}
-                                </td>
+                                <td colSpan={9} className="text-center">{t('common.text.noData')}</td>
                             </tr>
                         )}
                     </tbody>
-
                 </table>
             </div>
 
-            {/* Pagination Section */}
-            <div className="flex justify-center p-4">
-                <div className="btn-group">
-                    <button
-                        className={`btn ${testApiFilter.page === 0 ? 'btn-disabled' : ''}`}
-                        onClick={() => handlePageChange(testApiFilter.page - 1)}
-                        disabled={testApiFilter.page === 0}
-                    >
-                        «
-                    </button>
-                    <button className="btn">{testApiFilter.page + 1}</button>
-                    <button
-                        className={`btn ${testApiFilter.page + 1 >= Math.ceil(metadata.total / testApiFilter.size) ? 'btn-disabled' : ''}`}
-                        onClick={() => handlePageChange(testApiFilter.page + 1)}
-                        disabled={testApiFilter.page + 1 >= Math.ceil(metadata.total / testApiFilter.size)}
-                    >
-                        »
-                    </button>
-                </div>
-            </div>
+            {/* Modal for JSON View */}
+            <JsonViewModal data={modalData} id={modelViewName} />
+
         </PageLayout>
     );
 };

@@ -12,6 +12,7 @@ import { Project } from '@/pages/Project';
 import { getProjects } from '@/config/service';
 import { getValidateConstrains } from '@/pages/ValidateConstrain/service';
 import { ValidateConstrain } from '@/pages/ValidateConstrain/model/type';
+import Select from 'react-select';
 
 const ListTestField = () => {
     const modalCreateName = 'modal_test_field_create_project'; // Updated modal names
@@ -21,9 +22,11 @@ const ListTestField = () => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [validateConstrains, setValidateConstrains] = useState<ValidateConstrain[]>([]);
     const [testFieldFilter, setTestFieldFilter] = useState<TestFieldFilter>({
+        fieldName: '',
+        projectId: undefined,
         page: 0,
         size: 20,
-        sort: []
+        sort: "createdAt,desc"
     });
     const [selectedTestField, setSelectedTestField] = useState<TestField | null>(null); // for the update modal
     const [metadata, setMetadata] = useState({
@@ -85,6 +88,8 @@ const ListTestField = () => {
         fetchProjects();
         fetchValidateConstrains();
     }, []);
+
+
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -149,6 +154,39 @@ const ListTestField = () => {
                         handleSearch();
                     }}
                 >
+
+                    <div className="relative">
+                        <Select
+                            options={projects?.map((project) => ({
+                                value: project.id, // Assuming `project.id` is the correct unique identifier for each project
+                                label: project.projectName, // Display the project name as the label
+                            }))}
+                            value={testFieldFilter.projectId
+                                ? {
+                                    value: testFieldFilter.projectId,
+                                    label: projects.find((project) => project.id === testFieldFilter.projectId)?.projectName || '',
+                                }
+                                : null}
+                            onChange={(selectedOption) => {
+                                setTestFieldFilter({
+                                    ...testFieldFilter,
+                                    projectId: selectedOption ? selectedOption.value : null,
+                                });
+                                fetchTestFields({
+                                    ...testFieldFilter,
+                                    projectId: selectedOption ? selectedOption.value : null,
+                                })
+                            }}
+                            onInputChange={(inputValue) => {
+                                fetchProjects(inputValue); // Adjust this if you need to debounce or fetch with search filters
+                            }}
+                            placeholder={t('text.testApi.project')}
+                            className="select-xs"
+                            classNamePrefix="react-select "
+                            isClearable={true}
+                        />
+                    </div>
+
                     {/* Test Field Name input */}
                     <div className="relative">
                         <label className="input input-bordered flex items-center input-xs gap-2">

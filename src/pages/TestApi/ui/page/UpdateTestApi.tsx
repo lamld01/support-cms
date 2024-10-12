@@ -1,15 +1,14 @@
 import { WEB_ROUTER } from '@/utils/web_router';
-import { PageLayout } from '@/widgets';
+import { JsonInfo, PageLayout, TreeApp, TreeKeyValue } from '@/widgets';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Node, TestApiCreate, TestApiUpdate } from '../../model/type';
+import { TestApiUpdate } from '../../model/type';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Project } from '@/pages/Project';
 import { getProjects } from '@/config/service';
 import { toast } from 'react-toastify';
-import { createTestApi, getTestApiById, updateTestApi } from '../../service/TestFieldService';
-import { TrashIcon } from '@heroicons/react/24/outline';
-import { filterEmptyKeys } from '@/utils/helper';
+import { getTestApiById, updateTestApi } from '../../service/TestFieldService';
+import { getTestFields, TestField } from '@/pages/TestField';
 
 const UpdateTestApi = () => {
   const { t } = useTranslation();
@@ -17,15 +16,17 @@ const UpdateTestApi = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [testFields, setTestField] = useState<TestField[]>([]);
   const [form, setForm] = useState<TestApiUpdate>({
     id: 0,
     apiName: '',
+    path: '',
     projectId: 0,
     description: '',
     method: 'GET',
-    param: {},
-    header: {},
-    body: ''
+    param: [],
+    header: [],
+    body: undefined
   });
 
   const fetchProjects = async (name?: string) => {
@@ -43,11 +44,26 @@ const UpdateTestApi = () => {
     }
   };
 
+  const fetchTestFeilds = async (name?: string) => {
+    try {
+      const filter = {
+        fieldName: name,
+        page: 0,
+        size: 10,
+        sort: "createdAt,desc"
+      };
+      const response = await getTestFields(filter);
+      setTestField(response.data);
+    } catch (error: any) {
+      toast.error(t(`message.${error.message}`));
+    }
+  };
+
   const fetchTestApi = async () => {
     setLoading(true);
     try {
       const response = await getTestApiById(Number(id));
-      setForm(response.data);
+      setForm({ ...response.data, projectId: response.data.project.id });
     } catch (error: any) {
       toast.error(t(`message.${error.message}`));
     } finally {
@@ -58,7 +74,15 @@ const UpdateTestApi = () => {
   useEffect(() => {
     fetchProjects();
     fetchTestApi();
+    fetchTestFeilds();
   }, []);
+
+  const handleSetBody = (body?: JsonInfo) => {
+    setForm(prev => ({
+      ...prev,
+      body: body
+    }));
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -68,41 +92,13 @@ const UpdateTestApi = () => {
     }));
   };
 
-  const handleKeyValueChange = (type: 'param' | 'header', key: string, value: string) => {
-    setForm(prev => ({
-      ...prev,
-      [type]: {
-        ...prev[type],
-        [key]: value // Ensure value is a string
-      }
-    }));
-  };
-
-  const handleAddKeyValue = (type: 'param' | 'header') => {
-    setForm(prev => ({
-      ...prev,
-      [type]: {
-        ...prev[type],
-        '': '' // Add a new empty key-value pair
-      }
-    }));
-  };
-
-  const handleRemoveKeyValue = (type: 'param' | 'header', key: string) => {
-    const newKeyValue = { ...form[type] };
-    delete newKeyValue[key]; // Remove the specified key
-    setForm(prev => ({
-      ...prev,
-      [type]: newKeyValue // Update state
-    }));
-  };
 
   const handleSubmit = async () => {
+    console.log(form);
+
     setLoading(true);
     try {
-      const filteredParams = filterEmptyKeys(form.param);
-      const filteredHeaders = filterEmptyKeys(form.header);
-      await updateTestApi(Number(id), { ...form, param: filteredParams, header: filteredHeaders });
+      await updateTestApi(Number(id), form);
       navigate(WEB_ROUTER.LIST_TEST_API.ROOT);
     } catch (error: any) {
       toast.error(t(`message.${error.message}`));
@@ -154,25 +150,41 @@ const UpdateTestApi = () => {
           </div>
         </div>
 
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">{t('text.testApi.project')}</span>
-          </label>
-          <select
-            name="projectId"
-            value={form.projectId}
-            onChange={handleInputChange}
-            required
-            className="select select-bordered"
-          >
-            <option value="" disabled>Select a project</option>
-            {projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.projectName}
-              </option>
-            ))}
-          </select>
+        <div className="flex space-x-4">
+          <div className="flex-2 form-control">
+            <label className="label">
+              <span className="label-text">{t('text.testApi.project')}</span>
+            </label>
+            <select
+              name="projectId"
+              value={form.projectId}
+              onChange={handleInputChange}
+              required
+              className="select select-bordered"
+            >
+              <option value="" disabled>Select a project</option>
+              {projects.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.projectName}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex-1 form-control">
+            <label className="label">
+              <span className="label-text">{t('text.testApi.path')}</span>
+            </label>
+            <input
+              name="path"
+              value={form.path}
+              onChange={handleInputChange}
+              className="input input-bordered"
+            />
+          </div>
         </div>
+
+
 
         {/* Description Section */}
         <div className="form-control">
@@ -187,98 +199,36 @@ const UpdateTestApi = () => {
           />
         </div>
 
-        {/* Params and Headers Section */}
+        {/* Headers & Params Section */}
         <div className="flex space-x-4">
-          {/* Params Section */}
-          <div className="form-control flex-1">
-            <label className="label">
-              <span className="label-text">{t('text.testApi.params')}</span>
-            </label>
-            {Object.entries(form.param).map(([key, value]) => (
-              <div key={key} className="flex space-x-2 mb-2">
-                <input
-                  type="text"
-                  placeholder="Key"
-                  value={key} // This is a string
-                  onChange={(e) => handleKeyValueChange('param', e.target.value, String(value))} // Make sure the key is a string
-                  className="input input-bordered flex-1"
-                />
-                <input
-                  type="text"
-                  placeholder="Value"
-                  value={value || ''} // Ensure this is a string, default to empty
-                  onChange={(e) => handleKeyValueChange('param', key, e.target.value)} // Ensure e.target.value is a string
-                  className="input input-bordered flex-1"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveKeyValue('param', key)}
-                  className="btn btn-error btn-xs h-full flex items-center justify-center"
-                >
-                  <TrashIcon className="h-4 w-4" />
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => handleAddKeyValue('param')}
-              className="btn btn-secondary btn-xs"
-            >
-              {t('common.button.add')}
-            </button>
-          </div>
-
           {/* Headers Section */}
           <div className="form-control flex-1">
             <label className="label">
               <span className="label-text">{t('text.testApi.headers')}</span>
             </label>
-            {Object.entries(form.header).map(([key, value]) => (
-              <div key={key} className="flex space-x-2 mb-2">
-                <input
-                  type="text"
-                  placeholder="Key"
-                  value={key} // This is a string
-                  onChange={(e) => handleKeyValueChange('header', e.target.value, String(value))} // Ensure the key is a string
-                  className="input input-bordered flex-1"
-                />
-                <input
-                  type="text"
-                  placeholder="Value"
-                  value={value || ''} // Ensure this is a string, default to empty
-                  onChange={(e) => handleKeyValueChange('header', key, e.target.value)} // Ensure e.target.value is a string
-                  className="input input-bordered flex-1"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveKeyValue('header', key)}
-                  className="btn btn-error btn-xs h-full flex items-center justify-center"
-                >
-                  <TrashIcon className="h-4 w-4" />
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => handleAddKeyValue('header')}
-              className="btn btn-secondary btn-xs"
-            >
-              {t('common.button.add')}
-            </button>
+            <TreeKeyValue
+              items={form.header}
+              onChange={(newHeaders) => setForm(prev => ({ ...prev, header: newHeaders }))}
+            />
+          </div>
+
+          {/* Params Section */}
+          <div className="form-control flex-1">
+            <label className="label">
+              <span className="label-text">{t('text.testApi.params')}</span>
+            </label>
+            <TreeKeyValue
+              items={form.param}
+              onChange={(newParams) => setForm(prev => ({ ...prev, param: newParams }))}
+            />
           </div>
         </div>
 
-        {/* Body Section */}
         <div className="form-control">
-          <label className="label">
-            <span className="label-text">{t('text.testApi.body')}</span>
-          </label>
-          <textarea
-            name="body"
-            value={form.body}
-            onChange={handleInputChange}
-            className="textarea textarea-bordered"
-          />
+          <TreeApp body={form.body}
+            setBody={handleSetBody}
+            testFields={testFields}
+            fetchTestFeilds={fetchTestFeilds} />
         </div>
 
         {/* Submit Button */}
