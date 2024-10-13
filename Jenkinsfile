@@ -8,23 +8,22 @@ pipeline {
         NAME="dev-tools-cms"
     }
     stages {
-            stage('Build') {
-                steps {
-                    script {
-                      sh "sudo docker build -t ${RESPOSITORY}/${NAME}:${BUILD_NUMBER} ."
-                    }
-                }
-            }
-
-            stage('Push') {
-                steps {
-                    script {
-                      sh "sudo docker login --username=${RESPOSITORY} --password=${DOCKER_HUB_TOKEN} docker.io"
-                      sh "sudo docker tag ${RESPOSITORY}/${NAME}:${BUILD_NUMBER} ${RESPOSITORY}/${NAME}:latest"
-                      sh "sudo docker push ${RESPOSITORY}/${NAME}:${BUILD_NUMBER}"
-                      sh "sudo docker push ${RESPOSITORY}/${NAME}:latest"
-                    }
+        stage('Build') {
+            steps {
+                script {
+                  sh "sudo docker build -t ${REPOSITORY}/${NAME}:${BUILD_NUMBER} ."
                 }
             }
         }
+        stage('Push') {
+            steps {
+                script {
+                  sh "sudo docker login --username=${REPOSITORY} --password=${DOCKER_HUB_TOKEN} ${DOCKER_HUB_URL}"
+                  sh "sudo docker push ${REPOSITORY}/${NAME}:${BUILD_NUMBER}"
+                  sh "sudo docker tag ${REPOSITORY}/${NAME}:${BUILD_NUMBER} ${REPOSITORY}/${NAME}:latest"
+                  sh "sudo docker push ${REPOSITORY}/${NAME}:latest"
+                }
+            }
+        }
+    }
 }
