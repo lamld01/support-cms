@@ -19,7 +19,7 @@ const LayoutHeader: React.FC<LayoutHeaderProps> = ({ toggleSidebar, sidebarOpen 
         )}
       </button> {/* Mobile menu toggle */}
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl" href={WEB_ROUTER.HOME}>
+        <a className="btn btn-ghost text-xl" href={WEB_ROUTER.HOME.ROOT}>
           Ecommerce
         </a>
       </div>
@@ -50,7 +50,7 @@ const LayoutHeader: React.FC<LayoutHeaderProps> = ({ toggleSidebar, sidebarOpen 
               </a>
             </li>
             <li>
-              <a href={WEB_ROUTER.SETTING}>Settings</a>
+              <a href={WEB_ROUTER.SETTING.ROOT}>Settings</a>
             </li>
             <li>
               <a onClick={() => {/* Implement logout functionality here */ }}>Logout</a>

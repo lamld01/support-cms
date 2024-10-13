@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Select from 'react-select';
 import { JsonInfo } from "../../model/type";
+import MultiSelect from "@/component/share/MultiSelect";
 
 interface NodeDetailsProps {
     selectedNode?: JsonInfo;
@@ -18,11 +19,15 @@ const NodeDetails = (props: NodeDetailsProps) => {
 
     useEffect(() => {
         setEditedNode(props.selectedNode);
+        console.log(props.selectedNode);
+        
     }, [props.selectedNode]);
 
     const handleChange = (field: keyof JsonInfo, value?: string | number) => {
         if (editedNode) {
             const updatedNode = { ...editedNode, [field]: value };
+            console.log(updatedNode);
+            
             setEditedNode(updatedNode);
             props.onUpdate(updatedNode);
         }
@@ -39,14 +44,14 @@ const NodeDetails = (props: NodeDetailsProps) => {
     );
 
     if (!props.selectedNode) {
-        return <div className="text-gray-500">Select a node to see details</div>;
+        return <div className="text-neutral-content">Select a node to see details</div>;
     }
 
     return (
-        <div className="p-4 bg-gray-100 rounded shadow-md">
-            <h2 className="text-lg font-bold mb-2">Node Details</h2>
+        <div className="p-4 bg-base-100 rounded shadow-md">
+            <h2 className="text-lg font-bold mb-2">{t('text.treeNode.information')}</h2>
             <div className="mb-2">
-                <label className="block text-sm font-medium">Key:</label>
+                <label className="block text-sm font-medium">{t('text.treeNode.key')}</label>
                 <input
                     type="text"
                     className="input input-bordered w-full"
@@ -54,32 +59,30 @@ const NodeDetails = (props: NodeDetailsProps) => {
                     onChange={(e) => handleChange("name", e.target.value)}
                 />
             </div>
-            {/* Fetch value is testFieldId*/}
+            {/* Fetch value is testFieldId */}
             <div className="form-control my-4">
-                <label className="label">{t('text.testApi.field')}</label>
-                <Select
+                <label className="label">{t('text.treeNode.value')}</label>
+                <MultiSelect
+                    isMulti={false} // Set to true for multi-select functionality
                     options={props.testFields?.map(field => ({
-                        value: field.id, // Ensure this is the correct type (string or number)
-                        label: field.fieldName
-                    }))}
+                        value: field.id, // Ensure this is the correct type (number is expected)
+                        label: field.fieldName,
+                    })) || []} // Provide a fallback to avoid undefined
                     value={editedNode?.value ? {
                         value: editedNode.value,
                         label: props.testFields.find(field => field.id === editedNode.value)?.fieldName || ''
-                    } : null} // Set to null if there is no value
-                    onChange={(selectedOption) => {
-                        handleChange('value', selectedOption ? selectedOption.value : undefined); // Get the value of the selected option
+                    } : null}
+                    onChange={(selectedOption, actionMeta) => {
+                        handleChange('value', selectedOption ? selectedOption[0]?.value : undefined); // Get the value of the selected option
                     }}
                     onInputChange={(inputValue) => {
-                        debouncedFetchValidateConstrains(inputValue); // Call the debounced function
+                        debouncedFetchValidateConstrains(inputValue);
                     }}
-                    placeholder={t('text.testApi.field')}
-                    className="react-select-container"
-                    classNamePrefix="react-select"
-                    isMulti={false}
+                    placeholder={t(`common.select.field`)} // Example placeholder text
                 />
             </div>
             <div className="mb-2">
-                <label className="block text-sm font-medium">Type:</label>
+                <label className="block text-sm font-medium">{t('text.treeNode.type')}</label>
                 <select
                     className="input input-bordered w-full"
                     value={editedNode?.type || ""}
@@ -93,7 +96,7 @@ const NodeDetails = (props: NodeDetailsProps) => {
                     <option value="ARRAY_OBJECT">ARRAY OBJECT</option>
                 </select>
             </div>
-            <p><strong>ID:</strong> {props.selectedNode.id}</p>
+            
         </div>
     );
 };

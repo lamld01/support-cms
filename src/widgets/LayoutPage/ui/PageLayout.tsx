@@ -12,7 +12,7 @@ type Props = {
 const PageLayout = ({ loading, children, className = '',title, breadcrumbs }: Props) => {
     return (
         <div
-            className={`min-h-screen bg-base-100 p-5 ${className} md:w-[calc(100vw-256px)] overflow-auto`} 
+            className={`min-h-screen bg-base-50 p-5 ${className} md:w-[calc(100vw-256px)] overflow-auto`} 
         >
             {/* Breadcrumbs */}
             <div className="breadcrumbs max-w-xs text-sm ">

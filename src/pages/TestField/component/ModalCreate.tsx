@@ -3,17 +3,15 @@ import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import { TestFieldCreate } from "../model/type";
 import { createTestField } from "../service/TestFieldService";
-import { getValidateConstrains } from "@/pages/ValidateConstrain/service";
 import { ValidateConstrain } from "@/pages/ValidateConstrain/model/type";
-import Select from 'react-select';
 import debounce from 'lodash/debounce'; // Import debounce from Lodash
 import { Project } from "@/pages/Project";
-import { getProjects } from "@/config/service";
+import MultiSelect from "@/component/share/MultiSelect";
 
 interface ModalCreateTestFieldProps {
     modalName: string;
     fetchTestFields: () => void;
-    projects : Project[];
+    projects: Project[];
     validateConstrains: ValidateConstrain[];
     fetchValidateConstrains: (name: string) => void;
 }
@@ -101,14 +99,14 @@ const ModalCreateTestField = ({ modalName, fetchTestFields, projects, validateCo
 
                 {/* Field default regex Input */}
                 <div className="form-control my-4">
-                    <label className="label">{t('text.testField.defaultRegex')}</label>
+                    <label className="label">{t('text.testField.defaultRegexValue')}</label>
                     <input
                         type="text"
                         className="input input-bordered"
                         name="defaultRegexValue"
                         value={formData.defaultRegexValue}
                         onChange={handleInputChange}
-                        placeholder={t('text.testField.defaultRegex')}
+                        placeholder={t('text.testField.defaultRegexValue')}
                     />
                 </div>
 
@@ -140,8 +138,7 @@ const ModalCreateTestField = ({ modalName, fetchTestFields, projects, validateCo
                 {/* Validate Constrain IDs Input - using react-select */}
                 <div className="form-control my-4">
                     <label className="label">{t('text.testField.validateConstrain')}</label>
-                    <Select
-                        isMulti
+                    <MultiSelect
                         options={validateConstrains.map(constrain => ({
                             value: constrain.id,
                             label: constrain.constrainName
@@ -150,16 +147,14 @@ const ModalCreateTestField = ({ modalName, fetchTestFields, projects, validateCo
                             value: id,
                             label: validateConstrains.find(constrain => constrain.id === id)?.constrainName || ''
                         }))}
-                        onChange={(selectedOptions) => {
+                        onChange={(selectedOptions, actionMeta) => {
                             const selectedIds = selectedOptions ? selectedOptions.map(option => option.value) : [];
                             setFormData({ ...formData, validateConstrainIds: selectedIds });
                         }}
                         onInputChange={(inputValue) => {
-                            debouncedFetchValidateConstrains(inputValue); // Call the debounced function
+                            debouncedFetchValidateConstrains(inputValue);
                         }}
                         placeholder={t('text.testField.validateConstrainIds')}
-                        className="react-select-container"
-                        classNamePrefix="react-select"
                     />
                 </div>
 

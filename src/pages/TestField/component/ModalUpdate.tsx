@@ -8,6 +8,7 @@ import { ValidateConstrain } from "@/pages/ValidateConstrain/model/type";
 import Select from 'react-select';
 import debounce from 'lodash/debounce';
 import { Project } from "@/pages/Project";
+import MultiSelect from "@/component/share/MultiSelect";
 
 interface ModalUpdateTestFieldProps {
     modalName: string;
@@ -114,14 +115,14 @@ const ModalUpdateTestField = ({ modalName, testField, fetchTestFields, projects,
 
                 {/* Field default regex Input */}
                 <div className="form-control my-4">
-                    <label className="label">{t('text.testField.defaultRegex')}</label>
+                    <label className="label">{t('text.testField.defaultRegexValue')}</label>
                     <input
                         type="text"
                         className="input input-bordered"
                         name="defaultRegexValue"
                         value={formData.defaultRegexValue}
                         onChange={handleInputChange}
-                        placeholder={t('text.testField.defaultRegex')}
+                        placeholder={t('text.testField.defaultRegexValue')}
                     />
                 </div>
 
@@ -153,8 +154,7 @@ const ModalUpdateTestField = ({ modalName, testField, fetchTestFields, projects,
                 {/* Validate Constrain IDs Input */}
                 <div className="form-control my-4">
                     <label className="label">{t('text.testField.validateConstrain')}</label>
-                    <Select
-                        isMulti
+                    <MultiSelect
                         options={validateConstrains.map(constrain => ({
                             value: constrain.id,
                             label: constrain.constrainName
@@ -163,7 +163,7 @@ const ModalUpdateTestField = ({ modalName, testField, fetchTestFields, projects,
                             value: id,
                             label: validateConstrains.find(constrain => constrain.id === id)?.constrainName || ''
                         }))}
-                        onChange={(selectedOptions) => {
+                        onChange={(selectedOptions, actionMeta) => {
                             const selectedIds = selectedOptions ? selectedOptions.map(option => option.value) : [];
                             setFormData({ ...formData, validateConstrainIds: selectedIds });
                         }}
@@ -171,8 +171,6 @@ const ModalUpdateTestField = ({ modalName, testField, fetchTestFields, projects,
                             debouncedFetchValidateConstrains(inputValue);
                         }}
                         placeholder={t('text.testField.validateConstrainIds')}
-                        className="react-select-container"
-                        classNamePrefix="react-select"
                     />
                 </div>
 

@@ -23,10 +23,13 @@ const TreeNode = ({ node, onSelect, onAddChild, onDelete }: TreeNodeProps) => {
 
     const handleSelect = (event: React.MouseEvent) => {
         event.stopPropagation();
-        onSelect(node);
+        // Prevent selecting the node with id 'body'
+        if (node.id !== 'body') {
+            onSelect(node);
+        }
     };
 
-    const canToggle = node.type === 'OBJECT' || node.type === 'ARRAY OBJECT' || node.type === 'ARRAY STRING';
+    const canToggle = node.type === 'OBJECT' || node.type === 'ARRAY OBJECT' || node.type === 'ARRAY STRING' || node.id === 'body';
 
     const handleAddChild = () => {
         const newId = `${node.id}.${node.children ? node.children.length + 1 : 1}`;
@@ -53,11 +56,11 @@ const TreeNode = ({ node, onSelect, onAddChild, onDelete }: TreeNodeProps) => {
                         {isOpen ? (
                             <ChevronDownIcon className="w-4 h-4 text-neutral" />
                         ) : (
-                            <ChevronUpIcon className="w-4 h-4text-neutral" />
+                            <ChevronUpIcon className="w-4 h-4 text-neutral" />
                         )}
                     </button>
                 )}
-                <span className={`cursor-pointer hover:text-primary ${canToggle ? 'ml-2' : ''}`} onClick={handleSelect}>
+                <span className={` ${canToggle ? 'ml-2' : 'hover:text-primary cursor-pointer '}`} onClick={handleSelect}>
                     {node.name}
                 </span>
 
@@ -79,7 +82,7 @@ const TreeNode = ({ node, onSelect, onAddChild, onDelete }: TreeNodeProps) => {
 
             {isOpen && canToggle && node.children && (
                 <ul className="ml-4 border-l border-gray-300 pl-3 mt-1">
-                    {node.children.map((child : JsonInfo) => (
+                    {node.children.map((child: JsonInfo) => (
                         <li key={child.id}>
                             <TreeNode node={child} onSelect={onSelect} onAddChild={onAddChild} onDelete={onDelete} />
                         </li>

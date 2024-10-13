@@ -4,17 +4,21 @@ import { useTranslation } from 'react-i18next';
 import { PageLayout } from '@/widgets';
 import { TestField, TestFieldFilter } from '../../model/type';
 import { WEB_ROUTER } from '@/utils/web_router';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ModalCreate from '../../component/ModalCreate';
 import ModalUpdate from '../../component/ModalUpdate';
-import { deleteTestField, getTestFields } from '../../service/TestFieldService';
+import { getTestFields } from '../../service/TestFieldService';
 import { Project } from '@/pages/Project';
 import { getProjects } from '@/config/service';
 import { getValidateConstrains } from '@/pages/ValidateConstrain/service';
 import { ValidateConstrain } from '@/pages/ValidateConstrain/model/type';
-import Select from 'react-select';
+import { Autocomplete } from '@/component';
+import TestFieldTable from '../../component/TestFieldTable';
 
-const ListTestField = () => {
+interface ListTestFieldProps {
+    apiId?: number
+    className?: string
+}
+const ListTestField = (props?: ListTestFieldProps) => {
     const modalCreateName = 'modal_test_field_create_project'; // Updated modal names
     const modalUpdateName = 'modal_test_field_update_project';
     const { t } = useTranslation();
@@ -82,14 +86,20 @@ const ListTestField = () => {
 
     useEffect(() => {
         fetchTestFields();
-    }, [testFieldFilter.page]);
+    }, [testFieldFilter.page, testFieldFilter.projectId]);
+
+
+    useEffect(() => {
+        if (props?.apiId) {
+            setTestFieldFilter((prev) => ({ ...prev, apiId: props.apiId }))
+            fetchTestFields();
+        }
+    }, [props?.apiId]);
 
     useEffect(() => {
         fetchProjects();
         fetchValidateConstrains();
     }, []);
-
-
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -114,27 +124,13 @@ const ListTestField = () => {
         }
     };
 
-    // Delete test field
-    const handleDeleteTestField = async (id: number) => {
-        const confirmDelete = window.confirm(t('Are you sure you want to delete this test field?'));
-        if (confirmDelete) {
-            try {
-                await deleteTestField(id);
-                toast.success(t('Test field deleted successfully'));
-                fetchTestFields(); // Refresh test field list after deletion
-            } catch (error: any) {
-                toast.error(t(`message.${error.message}`));
-            }
-        }
-    };
-
     return (
         <PageLayout
+            className={props?.className}
             breadcrumbs={[
                 { label: t('breadcrumbs.home'), url: '/' },
                 { label: t('breadcrumbs.listTestFields'), url: WEB_ROUTER.LIST_TEST_FIELD.ROOT, active: true },
             ]}
-            loading={loading}
             title={t('breadcrumbs.listTestFields')}
         >
             {/* Filter Section */}
@@ -150,40 +146,20 @@ const ListTestField = () => {
                 <form
                     className="join join-horizontal gap-1"
                     onSubmit={(e) => {
-                        e.preventDefault();
+                        e.preventDefault()
                         handleSearch();
                     }}
                 >
 
-                    <div className="relative">
-                        <Select
-                            options={projects?.map((project) => ({
-                                value: project.id, // Assuming `project.id` is the correct unique identifier for each project
-                                label: project.projectName, // Display the project name as the label
+                    {/* project */}
+                    <div className="relative z-10">
+                        <Autocomplete
+                            options={projects.map((project) => ({
+                                label: project.projectName,
+                                value: project.id,
                             }))}
-                            value={testFieldFilter.projectId
-                                ? {
-                                    value: testFieldFilter.projectId,
-                                    label: projects.find((project) => project.id === testFieldFilter.projectId)?.projectName || '',
-                                }
-                                : null}
-                            onChange={(selectedOption) => {
-                                setTestFieldFilter({
-                                    ...testFieldFilter,
-                                    projectId: selectedOption ? selectedOption.value : null,
-                                });
-                                fetchTestFields({
-                                    ...testFieldFilter,
-                                    projectId: selectedOption ? selectedOption.value : null,
-                                })
-                            }}
-                            onInputChange={(inputValue) => {
-                                fetchProjects(inputValue); // Adjust this if you need to debounce or fetch with search filters
-                            }}
-                            placeholder={t('text.testApi.project')}
-                            className="select-xs"
-                            classNamePrefix="react-select "
-                            isClearable={true}
+                            onChange={(value) => setTestFieldFilter({ ...testFieldFilter, projectId: Number(value) })}
+                            placeholder={t('text.testApi.selectProject')}
                         />
                     </div>
 
@@ -220,71 +196,12 @@ const ListTestField = () => {
             </div>
 
             {/* Table Section */}
-            <div className="overflow-x-auto">
-                <table className="table table-zebra text-center">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>{t('common.text.ID')}</th>
-                            <th>{t('text.testField.fieldName')}</th>
-                            <th>{t('text.testField.project')}</th>
-                            <th>{t('text.testField.defaultRegexValue')}</th>
-                            <th>{t('text.testField.description')}</th>
-                            <th>{t('text.testField.fieldCode')}</th>
-                            <th>{t('text.testField.validateConstrain')}</th>
-                            <th>{t('common.text.action')}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {testFields.length > 0 ? (
-                            testFields.map((field, index) => (
-                                <tr key={field.id}>
-                                    <th>{index + 1 + testFieldFilter.page * testFieldFilter.size}</th>
-                                    <td>{field.id || 'N/A'}</td>
-                                    <td>{field.fieldName || 'N/A'}</td>
-                                    <td>{field.project.projectName || 'N/A'}</td>
-                                    <td>{field.defaultRegexValue || 'N/A'}</td>
-                                    <td>{field.description || 'N/A'}</td>
-                                    <td>{field.fieldCode || 'N/A'}</td>
-                                    <td>
-                                        {field.validateConstrains && field.validateConstrains.length > 0 ? (
-                                            <ul className="list-disc list-inside">
-                                                {field.validateConstrains.map((constraint, idx) => (
-                                                    <li key={idx}>{constraint.constrainName}</li>
-                                                ))}
-                                            </ul>
-                                        ) : (
-                                            'N/A'
-                                        )}
-                                    </td>
-                                    <td className="flex justify-center">
-                                        <button
-                                            className="btn btn-sm btn-warning mx-2"
-                                            onClick={() => handleOpenUpdateModal(field)}
-                                            title={t(`common.button.edit`)}
-                                        >
-                                            <PencilIcon className="h-4 w-4" aria-hidden="true" />
-                                        </button>
-                                        <button
-                                            className="btn btn-sm btn-error mx-2"
-                                            onClick={() => handleDeleteTestField(field.id)}
-                                            title={t(`common.button.delete`)}
-                                        >
-                                            <TrashIcon className="h-4 w-4" aria-hidden="true" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={9} className="text-center">
-                                    {t('No data available')}
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+            <TestFieldTable
+                testFields={testFields}
+                loading={loading}
+                fetchTestFields={fetchTestFields}
+                handleOpenUpdateModal={handleOpenUpdateModal}
+            />
 
             {/* Pagination Section */}
             <div className="flex justify-center p-4">
