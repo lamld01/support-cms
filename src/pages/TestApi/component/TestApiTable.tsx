@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { JsonView, defaultStyles } from 'react-json-view-lite';
 import { PencilIcon, TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
-import { BiDownArrow, BiMoveVertical, BiRightArrow } from 'react-icons/bi';
+import { BiRightArrow } from 'react-icons/bi';
 import { TestApi } from '../model/type';
 import { useTranslation } from 'react-i18next';
-import ModalTestFieldTable from '@/pages/TestField/component/ModalTestFieldTable';
 
 interface TestApiTableProps {
     data: TestApi[];
@@ -27,17 +26,17 @@ const TestApiTable: React.FC<TestApiTableProps> = ({
     page,
     size
 }) => {
-    const modalTestFieldTable = 'modal_test_field_table';
+    // const modalTestFieldTable = 'modal_test_field_table';
     const { t } = useTranslation();
-    const [selectedApi, setSelectedApi] = useState<number>();
+    // const [selectedApi, setSelectedApi] = useState<number>();
 
-    const handleOpenTestFieldModal = (id: number) => {
-        setSelectedApi(id)
-        const modal = document.getElementById(modalTestFieldTable);
-        if (modal instanceof HTMLDialogElement) {
-            modal.showModal();
-        }
-    }
+    // const handleOpenTestFieldModal = (id: number) => {
+    //     setSelectedApi(id)
+    //     const modal = document.getElementById(modalTestFieldTable);
+    //     if (modal instanceof HTMLDialogElement) {
+    //         modal.showModal();
+    //     }
+    // }
     return (
         <div>
             <table className="table table-zebra">
@@ -111,19 +110,18 @@ const TestApiTable: React.FC<TestApiTableProps> = ({
                                             <TrashIcon className="h-4 w-4" aria-hidden="true" />
                                         </button>
 
-                                        <div className="dropdown dropdown-end ">
+                                        {/* <div className="dropdown dropdown-end ">
                                             <button tabIndex={0} className="btn btn-info btn-xs"><BiDownArrow className="h-4 w-4" aria-hidden="true" /></button>
                                             <ul
                                                 tabIndex={0}
                                                 className="menu dropdown-content rounded-box z-[1] mt-4 w-52 p-2 shadow">
-
                                                 <li>
                                                     <a onClick={() => handleOpenTestFieldModal(api.id)}>
                                                         {t('text.testApi.viewTestField')}
                                                     </a>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </td>
                             </tr>
@@ -135,7 +133,6 @@ const TestApiTable: React.FC<TestApiTableProps> = ({
                     )}
                 </tbody>
             </table>
-            <ModalTestFieldTable modelName={modalTestFieldTable} apiId={selectedApi} />
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react"; // Import useCallback
+import { useState, useCallback } from "react"; // Import useCallback
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import { TestFieldCreate } from "../model/type";
@@ -147,7 +147,7 @@ const ModalCreateTestField = ({ modalName, fetchTestFields, projects, validateCo
                             value: id,
                             label: validateConstrains.find(constrain => constrain.id === id)?.constrainName || ''
                         }))}
-                        onChange={(selectedOptions, actionMeta) => {
+                        onChange={(selectedOptions) => {
                             const selectedIds = selectedOptions ? selectedOptions.map(option => option.value) : [];
                             setFormData({ ...formData, validateConstrainIds: selectedIds });
                         }}

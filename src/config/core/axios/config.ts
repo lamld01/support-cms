@@ -1,6 +1,5 @@
 import { store } from '@/app/store';
 import { clearToken, TokenState } from '@/config/slice/token/slice';
-import { WEB_ROUTER } from '@/utils/web_router';
 import axios from 'axios';
 
 // Tạo một instance của Axios

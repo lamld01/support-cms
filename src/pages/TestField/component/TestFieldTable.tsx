@@ -82,7 +82,7 @@ const TestFieldTable: React.FC<TestFieldTableProps> = ({
                     ))
                 ) : (
                     <tr>
-                        <td colSpan={9}>No data found.</td>
+                        <td colSpan={9}> ound.</td>
                     </tr>
                 )
             )}

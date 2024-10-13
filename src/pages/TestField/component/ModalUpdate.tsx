@@ -3,9 +3,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
 import { TestField, TestFieldUpdate } from "../model/type";
 import { updateTestField } from "../service/TestFieldService";
-import { getValidateConstrains } from "@/pages/ValidateConstrain/service";
 import { ValidateConstrain } from "@/pages/ValidateConstrain/model/type";
-import Select from 'react-select';
 import debounce from 'lodash/debounce';
 import { Project } from "@/pages/Project";
 import MultiSelect from "@/component/share/MultiSelect";
@@ -163,7 +161,7 @@ const ModalUpdateTestField = ({ modalName, testField, fetchTestFields, projects,
                             value: id,
                             label: validateConstrains.find(constrain => constrain.id === id)?.constrainName || ''
                         }))}
-                        onChange={(selectedOptions, actionMeta) => {
+                        onChange={(selectedOptions) => {
                             const selectedIds = selectedOptions ? selectedOptions.map(option => option.value) : [];
                             setFormData({ ...formData, validateConstrainIds: selectedIds });
                         }}

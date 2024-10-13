@@ -1,5 +1,5 @@
 import { setTheme } from "@/config/slice/setting/settingSlice";
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 
 // List of themes

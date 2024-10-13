@@ -7,14 +7,9 @@ import { Project } from '@/pages/Project';
 import { getProjects } from '@/config/service';
 import { toast } from 'react-toastify';
 import { createTestApi } from '../../service/TestFieldService';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import { getTestFields, TestField } from '@/pages/TestField';
 import { TestApiCreate } from '../../model/type';
 
-// Define types for params and headers
-interface KeyValue {
-  [key: string]: string; // KeyValue type allows for any string key with string value
-}
 
 const CreateTestApi = () => {
   const { t } = useTranslation();

@@ -2,7 +2,6 @@ import { TestField } from "@/pages/TestField";
 import { debounce } from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Select from 'react-select';
 import { JsonInfo } from "../../model/type";
 import MultiSelect from "@/component/share/MultiSelect";
 
@@ -72,7 +71,7 @@ const NodeDetails = (props: NodeDetailsProps) => {
                         value: editedNode.value,
                         label: props.testFields.find(field => field.id === editedNode.value)?.fieldName || ''
                     } : null}
-                    onChange={(selectedOption, actionMeta) => {
+                    onChange={(selectedOption) => {
                         handleChange('value', selectedOption ? selectedOption[0]?.value : undefined); // Get the value of the selected option
                     }}
                     onInputChange={(inputValue) => {

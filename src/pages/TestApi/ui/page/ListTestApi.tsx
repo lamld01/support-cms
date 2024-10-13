@@ -4,15 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { PageLayout } from '@/widgets';
 import { TestApi, TestApiFilter } from '../../model/type';
 import { WEB_ROUTER } from '@/utils/web_router';
-import { PencilIcon, TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
-import { Project } from '@/pages/Project';
-import { getProjects } from '@/config/service';
 import { deleteTestApi, getJsonBodyExampleTestApi, getTestApis, requestToTestApi } from '../../service/TestFieldService';
 import { useNavigate } from 'react-router-dom';
-import { JsonView, defaultStyles } from 'react-json-view-lite';
 import JsonViewModal from '@/widgets/LayoutViewJson/ui/page/JsonView';
-import { BiRightArrow } from 'react-icons/bi';
-import { Autocomplete } from '@/component';
 import TestApiTable from '../../component/TestApiTable';
 
 const ListTestApi = () => {
@@ -20,7 +14,6 @@ const ListTestApi = () => {
     const modelViewRequestName = 'model_request_view';
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [projects, setProjects] = useState<Project[]>([]);
     const [testApiFilter, setTestApiFilter] = useState<TestApiFilter>({
         page: 0,
         size: 20,
@@ -40,20 +33,20 @@ const ListTestApi = () => {
     });
     const [modalData, setModalData] = useState<any | undefined>(null);
 
-    const fetchProjects = async (name?: string) => {
-        try {
-            const filter = {
-                projectName: name,
-                page: 0,
-                size: 10,
-                sort: "createdAt,desc"
-            };
-            const response = await getProjects(filter);
-            setProjects(response.data);
-        } catch (error: any) {
-            toast.error(t(`message.${error.message}`));
-        }
-    };
+    // const fetchProjects = async (name?: string) => {
+    //     try {
+    //         const filter = {
+    //             projectName: name,
+    //             page: 0,
+    //             size: 10,
+    //             sort: "createdAt,desc"
+    //         };
+    //         const response = await getProjects(filter);
+    //         setProjects(response.data);
+    //     } catch (error: any) {
+    //         toast.error(t(`message.${error.message}`));
+    //     }
+    // };
 
     const fetchTestApis = async (filter?: TestApiFilter) => {
         setLoading(true);
@@ -105,7 +98,7 @@ const ListTestApi = () => {
     }, [testApiFilter.page, testApiFilter.projectId]);
 
     useEffect(() => {
-        fetchProjects();
+        // fetchProjects();
     }, []);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -116,10 +109,6 @@ const ListTestApi = () => {
     const handleSearch = () => {
         setTestApiFilter({ ...testApiFilter, page: 0 });
         fetchTestApis({ ...testApiFilter, page: 0 });
-    };
-
-    const handlePageChange = (newPage: number) => {
-        setTestApiFilter({ ...testApiFilter, page: newPage });
     };
 
     const handleDeleteTestApi = async (id: number) => {

@@ -17,10 +17,12 @@ const Login = () => {
     const [password, setPassword] = useState("");
 
     useEffect(() => {        
+        console.log(token);
+        
         if (token.accessToken) {
-            navigate(WEB_ROUTER.HOME);
+            navigate(WEB_ROUTER.HOME.ROOT);
         }
-    }, [])
+    }, [token])
     const handleSignIn = async (event: any) => {
         event.preventDefault(); // Prevent default form submission
 
