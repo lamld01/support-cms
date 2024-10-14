@@ -139,9 +139,9 @@ const ListTestApi = () => {
                         <label className="input input-bordered flex items-center input-xs gap-2">
                             <input
                                 type="text"
-                                className="grow"
+                                className="grow bg-inherit "
                                 placeholder={t('text.testApi.apiName')}
-                                name="fieldName"
+                                name="apiName"
                                 value={testApiFilter.apiName || ''}
                                 onChange={handleFilterChange}
                                 onBlur={handleSearch}

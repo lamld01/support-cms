@@ -20,7 +20,8 @@ const Login = () => {
         if (token.accessToken) {
             navigate(WEB_ROUTER.HOME.ROOT);
         }
-    }, [token])
+    }, [navigate, token]);
+
     const handleSignIn = async (event: any) => {
         event.preventDefault(); // Prevent default form submission
         try {
@@ -34,15 +35,15 @@ const Login = () => {
 
     return (
         <div className="max-w-md mx-auto p-4 md:p-6 lg:p-8 shadow-xl">
-            <h4 className="text-center mb-4 text-2xl">{t("text.SignIn")}</h4>
-            <p className="text-center mb-8">{t("text.WellcomeToCMSSystem")}</p>
+            <h4 className="text-center mb-4 text-2xl">{t("text.login.signIn")}</h4>
+            <p className="text-center mb-8">{t("text.login.wellcomeToDevTools")}</p>
             <form className="flex flex-col gap-6" onSubmit={handleSignIn}>
                 <div className="flex flex-col gap-2">
-                    <label>{t("text.Username")}</label>
+                    <label>{t("text.login.username")}</label>
                     <input
                         name="username"
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="username"
                         className="input input-bordered"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)} // Update state
@@ -50,7 +51,7 @@ const Login = () => {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label>{t("text.Password")}</label>
+                    <label>{t("text.login.password")}</label>
                     <input
                         name="password"
                         type="password"
@@ -64,10 +65,10 @@ const Login = () => {
                 <label className="flex items-center">
                     <input type="checkbox" className="checkbox checkbox-primary" />
                     <span className="ml-2">
-                        {t("text.RememberMeLogin")}{" "}
+                        {t("text.login.rememberMe")}{" "}
                     </span>
                 </label>
-                <button type="submit" className="btn btn-primary mt-6 w-full">{t("text.SignIn")}</button>
+                <button type="submit" className="btn btn-primary mt-6 w-full">{t("text.login.signIn")}</button>
             </form>
         </div>
     );

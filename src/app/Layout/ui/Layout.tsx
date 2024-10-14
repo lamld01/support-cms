@@ -7,10 +7,12 @@ import { RootState } from "@/app/store";
 import { TokenState } from "@/config/slice/token/slice";
 import { SellerAccountStatus } from "@/model/enum";
 import { WEB_ROUTER } from "@/utils/web_router";
+import { SettingsState } from "@/config/slice/setting/settingSlice";
 
 const Layout: FC = () => {
   const navigate = useNavigate();
   const token: TokenState = useSelector((state: RootState) => state.token);
+  const setting: SettingsState = useSelector((state: RootState) => state.settings);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -18,9 +20,11 @@ const Layout: FC = () => {
   };
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "default";
-    document.documentElement.setAttribute("data-theme", savedTheme);
-  }, []);
+    document.documentElement.setAttribute("data-theme", setting?.theme);
+    localStorage.setItem("theme", setting?.theme);
+  }, [setting?.theme]);
+
+
   useEffect(() => {
     if (!token.accessToken) {
       navigate(WEB_ROUTER.AUTH.LOGIN.ROOT);

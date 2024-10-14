@@ -1,7 +1,7 @@
 // src/store/settingsSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface SettingsState {
+export interface SettingsState {
     theme: string;
 }
 

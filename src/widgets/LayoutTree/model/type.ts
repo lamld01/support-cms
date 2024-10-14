@@ -1,3 +1,4 @@
+import { Option } from "@/component/share/MultiSelect";
 
 export interface JsonInfo {
     id: string;
@@ -11,5 +12,5 @@ export interface JsonInfo {
 
 export interface KeyValue {
     key: string;
-    value: string;
+    value: Option | undefined;
 }

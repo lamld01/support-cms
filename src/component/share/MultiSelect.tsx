@@ -20,11 +20,11 @@ const themeColors = {
         neutral50: '#3b424e', // Darker text for light theme
         neutral60: '#009485', // Success color
         neutral70: '#1c92f2', // Info color
-        neutral80: '#ff9900', // Warning color
+        neutral80: '#99ccff', // Warning color
         neutral90: '#1e2734', // Light mode text content
     },
     dark: {
-        primary: '#66aaff', // DaisyUI dark primary
+        primary: 'hsl(220deg 13% 69% / 20%)', // DaisyUI dark primary
         primary75: '#4d99ff', // Slightly faded primary
         primary50: '#3399ff', // More faded version
         primary25: '#282c35', // Darker background for selections
@@ -36,10 +36,10 @@ const themeColors = {
         neutral20: '#444444', // Borders and input background for dark mode
         neutral30: '#888888', // Placeholder text color for dark
         neutral40: '#888888', // Secondary focus for dark
-        neutral50: '#ffffff', // Light text for dark mode
+        neutral50: '#9da3af', // Light text for dark mode
         neutral60: '#009485', // Success color for dark mode
         neutral70: '#1c92f2', // Info color for dark mode
-        neutral80: '#ff9900', // Warning color for dark mode
+        neutral80: '#99ccff', // Warning color for dark mode
         neutral90: '#222222', // Text content for dark mode
     }
 };
@@ -50,6 +50,7 @@ export interface Option {
 }
 
 interface MultiSelectProps {
+    classname?: string;
     isMulti?: boolean;
     options?: Option[];
     value?: Option | Option[] | null;
@@ -59,6 +60,7 @@ interface MultiSelectProps {
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
+    classname,
     isMulti,
     options,
     value,
@@ -69,6 +71,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     const currentTheme = useSelector((state: any) => state?.settings?.theme);
     const [colors, setColors] = useState(currentTheme === 'dark' ? themeColors.dark : themeColors.light);
     const [valueInput, setValueInput] = useState<Option | Option[] | null>()
+
     useEffect(() => {
         setColors(currentTheme === 'dark' ? themeColors.dark : themeColors.light)
     }, [currentTheme]);
@@ -80,7 +83,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     return (
         <Select
             isMulti={isMulti || true}
-            options={options}
+            options={options || []}
             value={valueInput}
             onChange={onChange}
             onInputChange={onInputChange}
@@ -113,6 +116,15 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                     neutral90: colors.neutral90,
                 }
             })}
+            className={classname}
+            styles={{
+                valueContainer: (base, props) => ({
+                    height: '2.9rem',
+                    fontSize : '0.875rem',
+                    fontFamily: 'inherit',
+                   ...base,
+                })
+            }}
         />
     );
 };

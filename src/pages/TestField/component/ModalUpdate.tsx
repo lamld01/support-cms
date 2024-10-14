@@ -36,8 +36,6 @@ const ModalUpdateTestField = ({ modalName, testField, fetchTestFields, projects,
     );
 
     useEffect(() => {
-        console.log(testField);
-
         if (testField) {
             setFormData({
                 fieldName: testField.fieldName || "",

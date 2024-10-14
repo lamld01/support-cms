@@ -47,10 +47,19 @@
             "dropdown" : "...",
             "loading..." : "Đang tải...",
             "resetFilter": "Reset lọc",
-            "noContent" : "Không có dữ liệu"
+            "noContent" : "Không có dữ liệu",
+            "key" : "Tên",
+            "value" : "Giá trị"
         }
     },
     "text": {
+        "login": {
+            "signIn" : "Đăng nhập",
+            "username": "Tên đăng nhập",
+            "password": "Mật khẩu",
+            "rememberMe": "Ghi nhớ đăng nhập",
+            "wellcomeToDevTools": "Chào mừng đến dev tool"
+        },
         "project": {
             "projectId": "ID",
             "action": "Chức năng",

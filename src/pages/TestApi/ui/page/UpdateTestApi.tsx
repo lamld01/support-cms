@@ -94,8 +94,6 @@ const UpdateTestApi = () => {
 
 
   const handleSubmit = async () => {
-    console.log(form);
-
     setLoading(true);
     try {
       await updateTestApi(Number(id), form);
@@ -209,6 +207,8 @@ const UpdateTestApi = () => {
             <TreeKeyValue
               items={form.header}
               onChange={(newHeaders) => setForm(prev => ({ ...prev, header: newHeaders }))}
+              options={testFields.map(field => ({ label: field.fieldName, value: field.id }))}
+              onInputChange={fetchTestFeilds}
             />
           </div>
 
@@ -220,6 +220,8 @@ const UpdateTestApi = () => {
             <TreeKeyValue
               items={form.param}
               onChange={(newParams) => setForm(prev => ({ ...prev, param: newParams }))}
+              options={testFields.map(field => ({ label: field.fieldName, value: field.id }))}
+              onInputChange={fetchTestFeilds}
             />
           </div>
         </div>

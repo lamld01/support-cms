@@ -16,7 +16,7 @@ const CreateTestApi = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [testFields, setTestField] = useState<TestField[]>([]);
+  const [testFields, setTestFields] = useState<TestField[]>([]);
   const [form, setForm] = useState<TestApiCreate>({
     id: 0,
     apiName: '',
@@ -54,7 +54,8 @@ const CreateTestApi = () => {
         sort: "createdAt,desc"
       };
       const response = await getTestFields(filter);
-      setTestField(response.data);
+      setTestFields(response.data);
+      
     } catch (error: any) {
       toast.error(t(`message.${error.message}`));
     }
@@ -181,6 +182,8 @@ const CreateTestApi = () => {
             <TreeKeyValue
               items={form.header}
               onChange={(newHeaders) => setForm(prev => ({ ...prev, header: newHeaders }))}
+              options={testFields.map(field => ({ label: field.fieldName, value: field.id }))}
+              onInputChange={fetchTestFeilds}
             />
           </div>
 
@@ -192,6 +195,8 @@ const CreateTestApi = () => {
             <TreeKeyValue
               items={form.param}
               onChange={(newParams) => setForm(prev => ({ ...prev, param: newParams }))}
+              options={testFields.map(field => ({ label: field.fieldName, value: field.id }))}
+              onInputChange={fetchTestFeilds}
             />
           </div>
         </div>

@@ -18,15 +18,11 @@ const NodeDetails = (props: NodeDetailsProps) => {
 
     useEffect(() => {
         setEditedNode(props.selectedNode);
-        console.log(props.selectedNode);
-        
     }, [props.selectedNode]);
 
     const handleChange = (field: keyof JsonInfo, value?: string | number) => {
         if (editedNode) {
-            const updatedNode = { ...editedNode, [field]: value };
-            console.log(updatedNode);
-            
+            const updatedNode = { ...editedNode, [field]: value };            
             setEditedNode(updatedNode);
             props.onUpdate(updatedNode);
         }
