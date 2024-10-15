@@ -3,7 +3,7 @@ import { ValidateConstrain } from "@/pages/ValidateConstrain/model/type";
 
 export interface TestFieldFilter {
   apiId?: number | null;
-  projectId?: number | null;
+  projectId?: number;
   fieldName?: string;
   fieldCode?: string;
   constrainIds?: number[];

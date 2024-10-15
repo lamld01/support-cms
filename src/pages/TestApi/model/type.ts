@@ -8,7 +8,7 @@ export interface TestApiFilter {
   description?: string;
   page: number; // Optional and can default to 1
   size: number; // Optional and can default to 20
-  sort: string[]; // Optional, defaults to empty array
+  sort: string; // Optional, defaults to empty array
 }
 
 export interface TestApi {

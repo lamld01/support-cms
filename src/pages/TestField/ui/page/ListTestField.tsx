@@ -13,6 +13,8 @@ import { getValidateConstrains } from '@/pages/ValidateConstrain/service';
 import { ValidateConstrain } from '@/pages/ValidateConstrain/model/type';
 import { Autocomplete } from '@/component';
 import TestFieldTable from '../../component/TestFieldTable';
+import { getTestApis } from '@/pages/TestApi/service/TestFieldService';
+import { TestApi } from '@/pages/TestApi/model/type';
 
 interface ListTestFieldProps {
     apiId?: number
@@ -24,6 +26,7 @@ const ListTestField = (props?: ListTestFieldProps) => {
     const { t } = useTranslation();
 
     const [projects, setProjects] = useState<Project[]>([]);
+    const [apis, setApis] = useState<TestApi[]>([]);
     const [validateConstrains, setValidateConstrains] = useState<ValidateConstrain[]>([]);
     const [testFieldFilter, setTestFieldFilter] = useState<TestFieldFilter>({
         fieldName: '',
@@ -51,6 +54,22 @@ const ListTestField = (props?: ListTestFieldProps) => {
             };
             const response = await getProjects(filter);
             setProjects(response.data);
+        } catch (error: any) {
+            toast.error(t(`message.${error.message}`));
+        }
+    };
+
+    const fetchApis = async (name?: string) => {
+        try {
+            const filter = {
+                apiName: name,
+                projectId: testFieldFilter.projectId,
+                page: 0,
+                size: 10,
+                sort: "createdAt,desc"
+            };
+            const response = await getTestApis(filter);
+            setApis(response.data);
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         }
@@ -84,22 +103,38 @@ const ListTestField = (props?: ListTestFieldProps) => {
         }
     };
 
+    // API change handler
+    const hanldeApiChange = (apiId?: number) => {
+        setTestFieldFilter((prev) => ({ ...prev, apiId }));
+        fetchTestFields({ ...testFieldFilter, apiId });
+    };
+
+    // Combine all initial data fetches in a single useEffect
+    useEffect(() => {
+        const fetchData = async () => {
+            await fetchProjects();
+            await fetchValidateConstrains();
+        };
+        fetchData();
+    }, []);
+
+    // Fetch test fields when filters change
     useEffect(() => {
         fetchTestFields();
-    }, [testFieldFilter.page, testFieldFilter.projectId]);
+    }, [testFieldFilter.page, testFieldFilter.projectId, testFieldFilter.apiId]);
 
+    // Fetch APIs when projectId changes
+    useEffect(() => {
+        fetchApis();
+    }, [testFieldFilter.projectId]);
 
+    // Initialize test fields if apiId is passed via props
     useEffect(() => {
         if (props?.apiId) {
-            setTestFieldFilter((prev) => ({ ...prev, apiId: props.apiId }))
+            setTestFieldFilter((prev) => ({ ...prev, apiId: props.apiId }));
             fetchTestFields();
         }
     }, [props?.apiId]);
-
-    useEffect(() => {
-        fetchProjects();
-        fetchValidateConstrains();
-    }, []);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -151,6 +186,19 @@ const ListTestField = (props?: ListTestFieldProps) => {
                     }}
                 >
 
+                    {/* api */}
+                    <div className="relative z-10">
+                        <Autocomplete
+                            options={apis.map((api) => ({
+                                label: api.apiName,
+                                value: api.id,
+                            }))}
+                            onChange={(value) => hanldeApiChange(value ? Number(value) : undefined)}
+                            onInputChange={(value) => fetchApis(value)}
+                            placeholder={t('text.testField.selectApi')}
+                        />
+                    </div>
+
                     {/* project */}
                     <div className="relative z-10">
                         <Autocomplete
@@ -158,8 +206,8 @@ const ListTestField = (props?: ListTestFieldProps) => {
                                 label: project.projectName,
                                 value: project.id,
                             }))}
-                            onChange={(value) => setTestFieldFilter({ ...testFieldFilter, projectId: Number(value) })}
-                            placeholder={t('text.testApi.selectProject')}
+                            onChange={(value) => setTestFieldFilter({ ...testFieldFilter, projectId: value ? Number(value) : undefined })}
+                            placeholder={t('text.testField.selectProject')}
                         />
                     </div>
 
