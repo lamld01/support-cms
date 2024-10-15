@@ -1,9 +1,10 @@
 import React from 'react';
 import { JsonView, defaultStyles } from 'react-json-view-lite';
 import { PencilIcon, TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
-import { BiRightArrow } from 'react-icons/bi';
+import { BiDownArrow, BiRightArrow } from 'react-icons/bi';
 import { TestApi } from '../model/type';
 import { useTranslation } from 'react-i18next';
+import { WEB_ROUTER } from '@/utils/web_router';
 
 interface TestApiTableProps {
     data: TestApi[];
@@ -110,18 +111,18 @@ const TestApiTable: React.FC<TestApiTableProps> = ({
                                             <TrashIcon className="h-4 w-4" aria-hidden="true" />
                                         </button>
 
-                                        {/* <div className="dropdown dropdown-end ">
+                                        <div className="dropdown dropdown-end ">
                                             <button tabIndex={0} className="btn btn-info btn-xs"><BiDownArrow className="h-4 w-4" aria-hidden="true" /></button>
                                             <ul
                                                 tabIndex={0}
                                                 className="menu dropdown-content rounded-box z-[1] mt-4 w-52 p-2 shadow">
                                                 <li>
-                                                    <a onClick={() => handleOpenTestFieldModal(api.id)}>
+                                                    <a href={WEB_ROUTER.LIST_TEST_FIELD.ROOT.replace(":apiId", api.id.toString())}>
                                                         {t('text.testApi.viewTestField')}
                                                     </a>
                                                 </li>
                                             </ul>
-                                        </div> */}
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

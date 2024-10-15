@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { PageLayout } from '@/widgets';
@@ -15,14 +15,13 @@ import { Autocomplete } from '@/component';
 import TestFieldTable from '../../component/TestFieldTable';
 import { getTestApis } from '@/pages/TestApi/service/TestFieldService';
 import { TestApi } from '@/pages/TestApi/model/type';
+import { useParams } from 'react-router-dom';
+import debounce from 'lodash/debounce';
 
-interface ListTestFieldProps {
-    apiId?: number
-    className?: string
-}
-const ListTestField = (props?: ListTestFieldProps) => {
-    const modalCreateName = 'modal_test_field_create_project'; // Updated modal names
+const ListTestField = () => {
+    const modalCreateName = 'modal_test_field_create_project';
     const modalUpdateName = 'modal_test_field_update_project';
+    const { apiId } = useParams();
     const { t } = useTranslation();
 
     const [projects, setProjects] = useState<Project[]>([]);
@@ -31,20 +30,23 @@ const ListTestField = (props?: ListTestFieldProps) => {
     const [testFieldFilter, setTestFieldFilter] = useState<TestFieldFilter>({
         fieldName: '',
         projectId: undefined,
+        apiId: undefined,
         page: 0,
         size: 20,
         sort: "updatedAt,desc"
     });
-    const [selectedTestField, setSelectedTestField] = useState<TestField | null>(null); // for the update modal
-    const [metadata, setMetadata] = useState({
-        page: 0,
-        size: 20,
-        total: 0,
-    });
-    const [testFields, setTestFields] = useState<TestField[]>([]); // Updated state type
+    const [selectedTestField, setSelectedTestField] = useState<TestField | null>(null);
+    const [metadata, setMetadata] = useState({ page: 0, size: 20, total: 0 });
+    const [testFields, setTestFields] = useState<TestField[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const fetchProjects = async (name?: string) => {
+    // Create a debounced function outside the component to avoid redefining it on each render
+    const debouncedFetchTestFields = useRef(debounce((filter: TestFieldFilter) => {
+        fetchTestFields(filter);
+    }, 300)).current;
+
+    // Fetch projects
+    const fetchProjects = useCallback(async (name?: string) => {
         try {
             const filter = {
                 projectName: name,
@@ -57,9 +59,10 @@ const ListTestField = (props?: ListTestFieldProps) => {
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         }
-    };
+    }, [t]);
 
-    const fetchApis = async (name?: string) => {
+    // Fetch APIs
+    const fetchApis = useCallback(async (name?: string) => {
         try {
             const filter = {
                 apiName: name,
@@ -73,22 +76,24 @@ const ListTestField = (props?: ListTestFieldProps) => {
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         }
-    };
+    }, [t, testFieldFilter.projectId]);
 
-    const fetchTestFields = async (filter?: TestFieldFilter) => {
+    // Fetch test fields
+    const fetchTestFields = useCallback(async (filter?: TestFieldFilter) => {
         setLoading(true);
         try {
-            const response = await getTestFields(filter || testFieldFilter);
+            const response = await getTestFields(filter);
             setTestFields(response.data);
-            setMetadata({ ...metadata, total: response.metadata.total });
+            setMetadata(prev => ({ ...prev, total: response.metadata.total })); // Update total without changing metadata
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         } finally {
             setLoading(false);
         }
-    };
+    }, [t]);
 
-    const fetchValidateConstrains = async (name?: string) => {
+    // Fetch validate constraints
+    const fetchValidateConstrains = useCallback(async (name?: string) => {
         try {
             const filter = {
                 validateConstrainName: name,
@@ -101,53 +106,53 @@ const ListTestField = (props?: ListTestFieldProps) => {
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         }
-    };
+    }, [t]);
 
-    // API change handler
-    const hanldeApiChange = (apiId?: number) => {
-        setTestFieldFilter((prev) => ({ ...prev, apiId }));
-        fetchTestFields({ ...testFieldFilter, apiId });
-    };
-
-    // Combine all initial data fetches in a single useEffect
+    // Initial data fetch
     useEffect(() => {
         const fetchData = async () => {
             await fetchProjects();
             await fetchValidateConstrains();
         };
         fetchData();
-    }, []);
+    }, [fetchProjects, fetchValidateConstrains, fetchApis]);
+
+    useEffect(() => {
+        setTestFieldFilter((prev) => ({...prev, apiId: apiId}))
+    }, [apiId])
 
     // Fetch test fields when filters change
     useEffect(() => {
-        fetchTestFields();
-    }, [testFieldFilter.page, testFieldFilter.projectId, testFieldFilter.apiId]);
+        fetchTestFields(testFieldFilter);
+    }, [fetchTestFields, testFieldFilter.projectId, testFieldFilter.apiId]);
 
     // Fetch APIs when projectId changes
     useEffect(() => {
         fetchApis();
-    }, [testFieldFilter.projectId]);
-
-    // Initialize test fields if apiId is passed via props
-    useEffect(() => {
-        if (props?.apiId) {
-            setTestFieldFilter((prev) => ({ ...prev, apiId: props.apiId }));
-            fetchTestFields();
-        }
-    }, [props?.apiId]);
+    }, [fetchApis, testFieldFilter.projectId]);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setTestFieldFilter({ ...testFieldFilter, [name]: value });
+        setTestFieldFilter((prev) => ({ ...prev, [name]: value }));
+
+        // Debounced search function
+        if (name === "fieldName") {
+            debouncedFetchTestFields({ ...testFieldFilter, fieldName: value, page: 0 }); // Reset page on search
+        }
     };
 
     const handleSearch = () => {
-        setTestFieldFilter({ ...testFieldFilter, page: 0 }); // Reset to first page on search
+        setTestFieldFilter((prev) => ({ ...prev, page: 0 })); // Reset to first page on search
         fetchTestFields({ ...testFieldFilter, page: 0 });
     };
 
+    const handleClearInput = () => {
+        setTestFieldFilter((prev) => ({ ...prev, fieldName: '', page: 0 })); // Clear input and reset to first page
+        fetchTestFields({ ...testFieldFilter, fieldName: '', page: 0 }); // Fetch with cleared fieldName
+    };
+
     const handlePageChange = (newPage: number) => {
-        setTestFieldFilter({ ...testFieldFilter, page: newPage });
+        setTestFieldFilter((prev) => ({ ...prev, page: newPage }));
     };
 
     // Open update modal with selected test field
@@ -161,7 +166,6 @@ const ListTestField = (props?: ListTestFieldProps) => {
 
     return (
         <PageLayout
-            className={props?.className}
             breadcrumbs={[
                 { label: t('breadcrumbs.home'), url: '/' },
                 { label: t('breadcrumbs.listTestFields'), url: WEB_ROUTER.LIST_TEST_FIELD.ROOT, active: true },
@@ -181,11 +185,10 @@ const ListTestField = (props?: ListTestFieldProps) => {
                 <form
                     className="join join-horizontal gap-1"
                     onSubmit={(e) => {
-                        e.preventDefault()
+                        e.preventDefault();
                         handleSearch();
                     }}
                 >
-
                     {/* api */}
                     <div className="relative z-10">
                         <Autocomplete
@@ -193,7 +196,8 @@ const ListTestField = (props?: ListTestFieldProps) => {
                                 label: api.apiName,
                                 value: api.id,
                             }))}
-                            onChange={(value) => hanldeApiChange(value ? Number(value) : undefined)}
+                            value={apis.find((api) => api.id === testFieldFilter.apiId)?.apiName}
+                            onChange={(value) => setTestFieldFilter({ ...testFieldFilter, apiId: value ? Number(value) : undefined })}
                             onInputChange={(value) => fetchApis(value)}
                             placeholder={t('text.testField.selectApi')}
                         />
@@ -216,7 +220,7 @@ const ListTestField = (props?: ListTestFieldProps) => {
                         <label className="input input-bordered flex items-center input-xs gap-2">
                             <input
                                 type="text"
-                                className="grow"
+                                className="grow bg-inherit"
                                 placeholder={t('text.testField.fieldName')}
                                 name="fieldName"
                                 value={testFieldFilter.fieldName || ''}
@@ -225,19 +229,20 @@ const ListTestField = (props?: ListTestFieldProps) => {
                             />
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 16 16"
+                                viewBox="0 0 20 20"
                                 fill="currentColor"
                                 className="h-4 w-4 opacity-70 cursor-pointer"
-                                onClick={handleSearch}
+                                onClick={handleClearInput} // Clear input on click
                             >
                                 <path
                                     fillRule="evenodd"
-                                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                    d="M6.293 6.293a1 1 0 011.414 0L10 8.586l2.293-2.293a1 1 0 111.414 1.414L11.414 10l2.293 2.293a1 1 0 01-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 01-1.414-1.414L8.586 10 6.293 7.707a1 1 0 010-1.414z"
                                     clipRule="evenodd"
                                 />
                             </svg>
                         </label>
                     </div>
+
 
                     <button className="btn btn-primary btn-xs">{t('common.button.search')}</button>
                 </form>

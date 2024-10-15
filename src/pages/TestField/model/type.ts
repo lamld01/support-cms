@@ -2,7 +2,7 @@ import { Project } from "@/pages/Project";
 import { ValidateConstrain } from "@/pages/ValidateConstrain/model/type";
 
 export interface TestFieldFilter {
-  apiId?: number | null;
+  apiId?: number | string | null;
   projectId?: number;
   fieldName?: string;
   fieldCode?: string;

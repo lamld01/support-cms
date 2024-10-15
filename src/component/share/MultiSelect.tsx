@@ -5,23 +5,23 @@ import Select, { MultiValue, ActionMeta } from 'react-select';
 // Define color mappings to match DaisyUI light and dark themes
 const themeColors = {
     light: {
-        primary: '#570df8', // DaisyUI light primary
-        primary75: '#4506cb', // Slightly faded primary
-        primary50: '#99ccff', // More faded version
-        primary25: '#e0e7ff', // Lighter background for selections
-        danger: '#ff5724', // DaisyUI error color
-        dangerLight: '#ffd1cf', // Lighter error color
+        primary: 'hsl(220deg 13% 69% / 20%)', // Updated primary color for light mode
+        primary75: '#2563eb', // Slightly faded primary
+        primary50: '#93c5fd', // More faded version
+        primary25: '#e0f2fe', // Lighter background for selections
+        danger: '#ef4444', // Error color for light mode
+        dangerLight: '#fca5a5', // Lighter error color for light mode
         neutral0: '#ffffff', // Light background
         neutral5: '#f9fafb', // Light base
-        neutral10: '#ced3d9', // Light neutral
-        neutral20: '#e6e6e6', // Light borders and inputs
-        neutral30: '#c2c2c2', // Placeholder text color
-        neutral40: '#bd0091', // Secondary focus
-        neutral50: '#3b424e', // Darker text for light theme
-        neutral60: '#009485', // Success color
-        neutral70: '#1c92f2', // Info color
-        neutral80: '#99ccff', // Warning color
-        neutral90: '#1e2734', // Light mode text content
+        neutral10: '#e5e7eb', // Light neutral
+        neutral20: '#d1d5db', // Light borders and inputs
+        neutral30: '#9ca3af', // Placeholder text color
+        neutral40: '#374151', // Darker text for light theme
+        neutral50: '#1f2937', // Darker text for light theme
+        neutral60: '#059669', // Success color
+        neutral70: '#2563eb', // Info color
+        neutral80: '#444444', // Warning color
+        neutral90: '#1e293b', // Light mode text content
     },
     dark: {
         primary: 'hsl(220deg 13% 69% / 20%)', // DaisyUI dark primary

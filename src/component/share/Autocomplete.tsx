@@ -10,6 +10,7 @@ type Props = {
   classname?: string;
   labelClassname?: string;
   options: OptionType[];
+  value?: string | '';
   onChange(val: number | string): void; // Hàm callback khi giá trị thay đổi
   onInputChange?(val: string): void; // Hàm callback khi giá trị input thay đổi
 
@@ -17,11 +18,11 @@ type Props = {
 };
 
 const Autocomplete: React.FC<Props> = (props) => {
-  const { options, placeholder, onChange, onInputChange } = props;
+  const { options, placeholder, value, onChange, onInputChange } = props;
   const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState<OptionType[]>(options); // Lưu trữ các tùy chọn được lọc
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string | undefined>("");
 
   // Đóng dropdown khi click bên ngoài
   useEffect(() => {
@@ -44,6 +45,11 @@ const Autocomplete: React.FC<Props> = (props) => {
     );
   }, [searchValue, options]);
 
+  useEffect(() => {
+    if(value){
+      setSearchValue(value);
+    }
+  }, [value])
   return (
     <div
       ref={ref}

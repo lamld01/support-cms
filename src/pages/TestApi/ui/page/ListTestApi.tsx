@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { PageLayout } from '@/widgets';
@@ -8,64 +8,53 @@ import { deleteTestApi, getJsonBodyExampleTestApi, getTestApis, requestToTestApi
 import { useNavigate } from 'react-router-dom';
 import JsonViewModal from '@/widgets/LayoutViewJson/ui/page/JsonView';
 import TestApiTable from '../../component/TestApiTable';
+import { debounce } from 'lodash';
 
 const ListTestApi = () => {
     const modelViewBodyName = 'model_body_view';
     const modelViewRequestName = 'model_request_view';
     const { t } = useTranslation();
     const navigate = useNavigate();
+
     const [testApiFilter, setTestApiFilter] = useState<TestApiFilter>({
         page: 0,
         size: 20,
-        sort: "updatedAt, desc"
+        sort: "updatedAt,desc",
+        apiName: '',
     });
+
     const [metadata, setMetadata] = useState({
         page: 0,
         size: 20,
         total: 0,
     });
+
     const [testApis, setTestApis] = useState<TestApi[]>([]);
     const [loading, setLoading] = useState(false);
-    // Updated loadingJsonView to be an object
     const [loadingJsonView, setLoadingJsonView] = useState({
         [modelViewBodyName]: false,
         [modelViewRequestName]: false,
     });
     const [modalData, setModalData] = useState<any | undefined>(null);
 
-    // const fetchProjects = async (name?: string) => {
-    //     try {
-    //         const filter = {
-    //             projectName: name,
-    //             page: 0,
-    //             size: 10,
-    //             sort: "createdAt,desc"
-    //         };
-    //         const response = await getProjects(filter);
-    //         setProjects(response.data);
-    //     } catch (error: any) {
-    //         toast.error(t(`message.${error.message}`));
-    //     }
-    // };
-
-    const fetchTestApis = async (filter?: TestApiFilter) => {
+    const fetchTestApis = useCallback(async (filter?: TestApiFilter) => {
         setLoading(true);
         try {
-            const response = await getTestApis(filter || testApiFilter);
+            const response = await getTestApis(filter);
             setTestApis(response.data);
-            setMetadata({ ...metadata, total: response.metadata.total });
+            setMetadata(response.metadata);
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         } finally {
             setLoading(false);
         }
-    };
+    }, [t]);
 
-    const getJsonBodyExample = async (id: number) => {
-        setLoadingJsonView((prev) => ({ ...prev, [modelViewBodyName]: true })); // Set loading for body view
+    const getJsonBodyExample = useCallback(async (id: number) => {
+        setLoadingJsonView((prev) => ({ ...prev, [modelViewBodyName]: true }));
         try {
             const response = await getJsonBodyExampleTestApi(id);
-            setModalData(response.data); // Set the data for modal
+            setModalData(response.data);
             const modal = document.getElementById(modelViewBodyName);
             if (modal instanceof HTMLDialogElement) {
                 modal.showModal();
@@ -73,42 +62,48 @@ const ListTestApi = () => {
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         } finally {
-            setLoadingJsonView((prev) => ({ ...prev, [modelViewBodyName]: false })); // Reset loading for body view
+            setLoadingJsonView((prev) => ({ ...prev, [modelViewBodyName]: false }));
         }
-    };
+    }, [modelViewBodyName, t]);
 
-    const requestTestApi = async (id: number) => {
-        setLoadingJsonView((prev) => ({ ...prev, [modelViewRequestName]: true })); // Set loading for request view
+    const requestTestApi = useCallback(async (id: number) => {
+        setLoadingJsonView((prev) => ({ ...prev, [modelViewRequestName]: true }));
         const modal = document.getElementById(modelViewRequestName);
         if (modal instanceof HTMLDialogElement) {
             modal.showModal();
         }
         try {
             const response = await requestToTestApi(id);
-            setModalData(response.data); // Set the data for modal
+            setModalData(response.data);
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         } finally {
-            setLoadingJsonView((prev) => ({ ...prev, [modelViewRequestName]: false })); // Reset loading for request view
+            setLoadingJsonView((prev) => ({ ...prev, [modelViewRequestName]: false }));
         }
-    };
+    }, [modelViewRequestName, t]);
 
     useEffect(() => {
         fetchTestApis();
-    }, [testApiFilter.page, testApiFilter.projectId]);
-
-    useEffect(() => {
-        // fetchProjects();
-    }, []);
+    }, [fetchTestApis]);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setTestApiFilter({ ...testApiFilter, [name]: value });
+        setTestApiFilter((prev) => ({ ...prev, [name]: value }));
+
+        // Debounced search function
+        if (name === "apiName") {
+            debouncedFetchTestFields({ ...testApiFilter, apiName: value, page: 0 }); // Reset page on search
+        }
     };
 
-    const handleSearch = () => {
-        setTestApiFilter({ ...testApiFilter, page: 0 });
-        fetchTestApis({ ...testApiFilter, page: 0 });
+    // Create a debounced search function for the input
+    const debouncedFetchTestFields = useRef(debounce((filter) => {
+        fetchTestApis(filter); // Gọi hàm fetch với filter mới
+    }, 300)).current;
+
+    const handleClearInput = () => {
+        setTestApiFilter((prev) => ({ ...prev, apiName: '', page: 0 })); // Clear input and reset to first page
+        fetchTestApis({ ...testApiFilter, apiName: '', page: 0 }); // Fetch with cleared apiName
     };
 
     const handleDeleteTestApi = async (id: number) => {
@@ -135,36 +130,37 @@ const ListTestApi = () => {
                     {t('common.button.create')}
                 </button>
                 <div className="flex items-center">
-                    <div className="relative">
-                        <label className="input input-bordered flex items-center input-xs gap-2">
-                            <input
-                                type="text"
-                                className="grow bg-inherit "
-                                placeholder={t('text.testApi.apiName')}
-                                name="apiName"
-                                value={testApiFilter.apiName || ''}
-                                onChange={handleFilterChange}
-                                onBlur={handleSearch}
-                            />
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 16 16"
-                                fill="currentColor"
-                                className="h-4 w-4 opacity-70 cursor-pointer"
-                                onClick={handleSearch}
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                                    clipRule="evenodd"
+                        <div className="relative">
+                            <label className="input input-bordered flex items-center input-xs gap-2">
+                                <input
+                                    type="text"
+                                    className="grow bg-inherit"
+                                    placeholder={t('text.testField.fieldName')}
+                                    name="apiName" // Changed from 'fieldName' to 'apiName'
+                                    value={testApiFilter.apiName || ''}
+                                    onChange={(e) => {
+                                        handleFilterChange(e); // Update state on change
+                                    }}
                                 />
-                            </svg>
-                        </label>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    className="h-4 w-4 opacity-70 cursor-pointer"
+                                    onClick={handleClearInput} // Clear input on click
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M6.293 6.293a1 1 0 011.414 0L10 8.586l2.293-2.293a1 1 0 111.414 1.414L11.414 10l2.293 2.293a1 1 0 01-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 01-1.414-1.414L8.586 10 6.293 7.707a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </label>
+                        </div>
+                        <button className="btn btn-xs btn-primary" onClick={() => fetchTestApis(testApiFilter)}>
+                            {t('common.button.search')}
+                        </button>
                     </div>
-                    <button className="btn btn-xs btn-primary" onClick={handleSearch}>
-                        {t('common.button.search')}
-                    </button>
-                </div>
             </div>
 
             {/* Table */}
