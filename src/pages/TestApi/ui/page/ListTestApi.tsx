@@ -17,7 +17,7 @@ const ListTestApi = () => {
     const [testApiFilter, setTestApiFilter] = useState<TestApiFilter>({
         page: 0,
         size: 20,
-        sort: []
+        sort: "updatedAt, desc"
     });
     const [metadata, setMetadata] = useState({
         page: 0,

@@ -35,7 +35,7 @@ const CreateTestApi = () => {
         projectName: name,
         page: 0,
         size: 10,
-        sort: "createdAt,desc"
+        sort: "updatedAt,desc"
       };
       const response = await getProjects(filter);
       setProjects(response.data);
@@ -51,7 +51,7 @@ const CreateTestApi = () => {
         projectId: form.projectId,
         page: 0,
         size: 10,
-        sort: "createdAt,desc"
+        sort: "updatedAt,desc"
       };
       const response = await getTestFields(filter);
       setTestFields(response.data);

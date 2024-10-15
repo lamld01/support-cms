@@ -33,7 +33,7 @@ const ListTestField = (props?: ListTestFieldProps) => {
         projectId: undefined,
         page: 0,
         size: 20,
-        sort: "createdAt,desc"
+        sort: "updatedAt,desc"
     });
     const [selectedTestField, setSelectedTestField] = useState<TestField | null>(null); // for the update modal
     const [metadata, setMetadata] = useState({
@@ -50,7 +50,7 @@ const ListTestField = (props?: ListTestFieldProps) => {
                 projectName: name,
                 page: 0,
                 size: 10,
-                sort: "createdAt,desc"
+                sort: "updatedAt,desc"
             };
             const response = await getProjects(filter);
             setProjects(response.data);
@@ -66,7 +66,7 @@ const ListTestField = (props?: ListTestFieldProps) => {
                 projectId: testFieldFilter.projectId,
                 page: 0,
                 size: 10,
-                sort: "createdAt,desc"
+                sort: "updatedAt,desc"
             };
             const response = await getTestApis(filter);
             setApis(response.data);
@@ -94,7 +94,7 @@ const ListTestField = (props?: ListTestFieldProps) => {
                 validateConstrainName: name,
                 page: 0,
                 size: 10,
-                sort: "createdAt,desc"
+                sort: "updatedAt,desc"
             };
             const response = await getValidateConstrains(filter);
             setValidateConstrains(response.data);
