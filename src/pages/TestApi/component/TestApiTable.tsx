@@ -1,10 +1,9 @@
 import React from 'react';
 import { JsonView, defaultStyles } from 'react-json-view-lite';
 import { PencilIcon, TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
-import { BiDownArrow, BiRightArrow, BiRightArrowAlt } from 'react-icons/bi';
+import { BiRightArrow, BiRightArrowAlt } from 'react-icons/bi';
 import { TestApi } from '../model/type';
 import { useTranslation } from 'react-i18next';
-import { WEB_ROUTER } from '@/utils/web_router';
 
 interface TestApiTableProps {
     data: TestApi[];

@@ -24,11 +24,11 @@ const ListTestApi = () => {
         apiName: '',
     });
 
-    const [metadata, setMetadata] = useState({
-        page: 0,
-        size: 20,
-        total: 0,
-    });
+    // const [metadata, setMetadata] = useState({
+    //     page: 0,
+    //     size: 20,
+    //     total: 0,
+    // });
 
     const [testApis, setTestApis] = useState<TestApi[]>([]);
     const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ const ListTestApi = () => {
         try {
             const response = await getTestApis(filter);
             setTestApis(response.data);
-            setMetadata(response.metadata);
+            // setMetadata(response.metadata);
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         } finally {
