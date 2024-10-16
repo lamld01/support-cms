@@ -16,7 +16,7 @@ const ListValidateConstrain = () => {
     const [validateConstrainFilter, setValidateConstrainFilter] = useState<ValidateConstrainFilter>({
         page: 0,
         size: 20,
-        sort: ""
+        sort: "updatedAt,desc"
     });
     const [selectedValidateConstrain, setSelectedValidateConstrain] = useState<ValidateConstrain | null>(null); // for the update modal
     const [metadata, setMetadata] = useState({

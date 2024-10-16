@@ -15,13 +15,11 @@ import { Autocomplete } from '@/component';
 import TestFieldTable from '../../component/TestFieldTable';
 import { getTestApis } from '@/pages/TestApi/service/TestFieldService';
 import { TestApi } from '@/pages/TestApi/model/type';
-import { useParams } from 'react-router-dom';
 import debounce from 'lodash/debounce';
 
 const ListTestField = () => {
     const modalCreateName = 'modal_test_field_create_project';
     const modalUpdateName = 'modal_test_field_update_project';
-    const { apiId } = useParams();
     const { t } = useTranslation();
 
     const [projects, setProjects] = useState<Project[]>([]);
@@ -76,7 +74,7 @@ const ListTestField = () => {
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
         }
-    }, [t, testFieldFilter.projectId]);
+    }, [t, testFieldFilter.projectId, testFieldFilter.apiId]);
 
     // Fetch test fields
     const fetchTestFields = useCallback(async (filter?: TestFieldFilter) => {
@@ -116,10 +114,6 @@ const ListTestField = () => {
         };
         fetchData();
     }, [fetchProjects, fetchValidateConstrains, fetchApis]);
-
-    useEffect(() => {
-        setTestFieldFilter((prev) => ({...prev, apiId: apiId}))
-    }, [apiId])
 
     // Fetch test fields when filters change
     useEffect(() => {

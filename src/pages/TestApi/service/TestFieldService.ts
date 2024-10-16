@@ -41,7 +41,16 @@ export const getJsonBodyExampleTestApi = async (testApiId: number) => {
 
 
 export const requestToTestApi = async (testApiId: number) => {
-    const response = await axiosInstant.post(`/test-api/request`, {}, {
+    const response = await axiosInstant.post(`/test-api/request/valid-api`, {}, {
+        params: {
+            id: testApiId
+        }
+    });
+    return response.data;
+}
+
+export const requestToInvalidTestApi = async (testApiId: number) => {
+    const response = await axiosInstant.post(`/test-api/request/invalid-api`, {}, {
         params: {
             id: testApiId
         }

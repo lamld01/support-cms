@@ -6,7 +6,7 @@ import axios from 'axios';
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8200/v1/manual-test',
   // baseURL: 'https://dev-tools-api.luckypresent.com.vn/v1/manual-test',
-  timeout: 10000,
+  timeout: 120000,
 });
 
 // Thêm interceptor cho yêu cầu để thêm token vào headers

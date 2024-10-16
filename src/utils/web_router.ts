@@ -32,7 +32,7 @@ const WEB_ROUTER = {
     },
 
     LIST_TEST_FIELD: {
-        ROOT: '/test/field/:apiId',
+        ROOT: '/test/field',
         PATH: '/test/field'
     },
 

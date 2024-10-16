@@ -119,7 +119,6 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             className={classname}
             styles={{
                 valueContainer: (base) => ({
-                    height: '2.9rem',
                     fontSize : '0.875rem',
                     fontFamily: 'inherit',
                    ...base,

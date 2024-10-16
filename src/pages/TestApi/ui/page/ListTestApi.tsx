@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PageLayout } from '@/widgets';
 import { TestApi, TestApiFilter } from '../../model/type';
 import { WEB_ROUTER } from '@/utils/web_router';
-import { deleteTestApi, getJsonBodyExampleTestApi, getTestApis, requestToTestApi } from '../../service/TestFieldService';
+import { deleteTestApi, getJsonBodyExampleTestApi, getTestApis, requestToInvalidTestApi, requestToTestApi } from '../../service/TestFieldService';
 import { useNavigate } from 'react-router-dom';
 import JsonViewModal from '@/widgets/LayoutViewJson/ui/page/JsonView';
 import TestApiTable from '../../component/TestApiTable';
@@ -12,7 +12,8 @@ import { debounce } from 'lodash';
 
 const ListTestApi = () => {
     const modelViewBodyName = 'model_body_view';
-    const modelViewRequestName = 'model_request_view';
+    const modelViewRequestName = 'model_valid_request_view';
+    const modelViewInvalidRequestName = 'model_invalid_request_view';
     const { t } = useTranslation();
     const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ const ListTestApi = () => {
     const [loadingJsonView, setLoadingJsonView] = useState({
         [modelViewBodyName]: false,
         [modelViewRequestName]: false,
+        [modelViewInvalidRequestName]: false,
     });
     const [modalData, setModalData] = useState<any | undefined>(null);
 
@@ -74,6 +76,22 @@ const ListTestApi = () => {
         }
         try {
             const response = await requestToTestApi(id);
+            setModalData(response.data);
+        } catch (error: any) {
+            toast.error(t(`message.${error.message}`));
+        } finally {
+            setLoadingJsonView((prev) => ({ ...prev, [modelViewRequestName]: false }));
+        }
+    }, [modelViewRequestName, t]);
+
+    const requestInvalidTestApi = useCallback(async (id: number) => {
+        setLoadingJsonView((prev) => ({ ...prev, [modelViewRequestName]: true }));
+        const modal = document.getElementById(modelViewRequestName);
+        if (modal instanceof HTMLDialogElement) {
+            modal.showModal();
+        }
+        try {
+            const response = await requestToInvalidTestApi(id);
             setModalData(response.data);
         } catch (error: any) {
             toast.error(t(`message.${error.message}`));
@@ -168,7 +186,8 @@ const ListTestApi = () => {
                 data={testApis}
                 loading={loading}
                 onViewJsonBody={getJsonBodyExample}
-                onRequestTestApi={requestTestApi}
+                onRequestValidTestApi={requestTestApi}
+                onRequestInvalidTestApi={requestInvalidTestApi}
                 onEdit={(id) => navigate(`${WEB_ROUTER.LIST_TEST_API.UPDATE.PATH}/${id}`)}
                 onDelete={handleDeleteTestApi}
                 page={testApiFilter.page}

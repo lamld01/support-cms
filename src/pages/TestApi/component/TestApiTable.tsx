@@ -1,7 +1,7 @@
 import React from 'react';
 import { JsonView, defaultStyles } from 'react-json-view-lite';
 import { PencilIcon, TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
-import { BiDownArrow, BiRightArrow } from 'react-icons/bi';
+import { BiDownArrow, BiRightArrow, BiRightArrowAlt } from 'react-icons/bi';
 import { TestApi } from '../model/type';
 import { useTranslation } from 'react-i18next';
 import { WEB_ROUTER } from '@/utils/web_router';
@@ -10,7 +10,8 @@ interface TestApiTableProps {
     data: TestApi[];
     loading: boolean;
     onViewJsonBody: (id: number) => void;
-    onRequestTestApi: (id: number) => void;
+    onRequestValidTestApi: (id: number) => void;
+    onRequestInvalidTestApi: (id: number) => void;
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
     page: number;
@@ -21,7 +22,8 @@ const TestApiTable: React.FC<TestApiTableProps> = ({
     data,
     loading,
     onViewJsonBody,
-    onRequestTestApi,
+    onRequestValidTestApi,
+    onRequestInvalidTestApi,
     onEdit,
     onDelete,
     page,
@@ -89,10 +91,17 @@ const TestApiTable: React.FC<TestApiTableProps> = ({
                                     <div className="flex justify-start items-center gap-2">
                                         <button
                                             className="btn btn-accent btn-xs"
-                                            onClick={() => onRequestTestApi(api.id)}
+                                            onClick={() => onRequestValidTestApi(api.id)}
                                             title="Run Test"
                                         >
                                             <BiRightArrow className="h-4 w-4" aria-hidden="true" />
+                                        </button>
+                                        <button
+                                            className="btn btn-accent btn-xs"
+                                            onClick={() => onRequestInvalidTestApi(api.id)}
+                                            title="Run Invalid Test"
+                                        >
+                                            <BiRightArrowAlt className="h-4 w-4" aria-hidden="true" />
                                         </button>
                                         <button
                                             className="btn btn-warning btn-xs"
@@ -111,7 +120,7 @@ const TestApiTable: React.FC<TestApiTableProps> = ({
                                             <TrashIcon className="h-4 w-4" aria-hidden="true" />
                                         </button>
 
-                                        <div className="dropdown dropdown-end ">
+                                        {/* <div className="dropdown dropdown-end ">
                                             <button tabIndex={0} className="btn btn-info btn-xs"><BiDownArrow className="h-4 w-4" aria-hidden="true" /></button>
                                             <ul
                                                 tabIndex={0}
@@ -122,7 +131,7 @@ const TestApiTable: React.FC<TestApiTableProps> = ({
                                                     </a>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </td>
                             </tr>
