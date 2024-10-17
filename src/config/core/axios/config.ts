@@ -4,8 +4,8 @@ import axios from 'axios';
 
 // Tạo một instance của Axios
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8200/v1/manual-test',
-  // baseURL: 'https://dev-tools-api.luckypresent.com.vn/v1/manual-test',
+  // baseURL: 'http://localhost:8200/v1/manual-test',
+  baseURL: 'https://dev-tools-api.luckypresent.com.vn/v1/manual-test',
   timeout: 120000,
 });
 
